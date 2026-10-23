@@ -22,6 +22,7 @@ Rancangan memecahnya menjadi 14 pertanyaan (9 Utama, 4 Pendukung, 1 Tambahan) da
 ## 2. Data
 
 - Sumber: dataset Telco Customer Churn dari IBM, tersedia di Kaggle.
+- Sumber data: [here](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) (Versi: 1, Tanggal akses: 23 Oktober 2026)
 - Ukuran (perkiraan, **belum diverifikasi**): ±7.043 pelanggan, 21 kolom, 1 file CSV. Tidak ada kolom tanggal; pola waktu dibaca dari tenure (±0–72 bulan). Angka ini dicek saat data diunduh.
 - Lisensi dan sitasi: dicek di halaman dataset sebelum project dipublikasikan.
 - Data mentah tidak di-commit ke repository. Cara mengunduhnya akan ditulis di `data/README.md`.

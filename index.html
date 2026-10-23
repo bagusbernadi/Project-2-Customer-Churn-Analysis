@@ -1,5 +1,8 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<a href="https://bagusbernadi.github.io/" style="display:inline-block;margin:12px 16px;font:600 14px/1.4 'Source Sans 3',Arial,sans-serif;color:#1A73E8;text-decoration:none">← All projects / Semua project</a>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Project 2: Customer Churn Telco</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Rancangan project portofolio Data Analyst: analisis pemicu churn pelanggan telekomunikasi dan revenue yang hilang, dengan SQL dan dashboard.">
@@ -148,7 +151,8 @@ main>nav a{border-radius:10px;font-size:15px;padding:8px 14px}
 }
 @media (max-width:620px){.kpis,.res{grid-template-columns:1fr 1fr}.tools{grid-template-columns:1fr}.row .n{width:78px}.banner{padding:18px}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.row .b{transition:none}}
-/* Project 2: tambahan */
+/* tambahan */
+.card a{color:var(--navy);font-weight:600}
 .row .n{width:130px}
 .tag.c1{background:#188038;color:#fff}.tag.c2{background:#9334E6;color:#fff}.tag.c3{background:#D93025;color:#fff}.tag.c4{background:#fff;color:#174EA6}
 .wf{display:grid;gap:0}
@@ -174,6 +178,9 @@ main>nav a{border-radius:10px;font-size:15px;padding:8px 14px}
 
 </style>
 
+</head>
+<body>
+<a href="https://bagusbernadi.github.io/" style="display:inline-block;margin:12px 16px;font:600 14px/1.4 'Source Sans 3',Arial,sans-serif;color:#1A73E8;text-decoration:none">← All projects / Semua project</a>
 <main>
 <nav aria-label="Section navigation"><a href="#s1">Background</a><a href="#s2">Business Questions</a><a href="#s3">Churn &amp; Revenue Loss</a><a href="#s4">Dataset</a><a href="#s5">Tools</a><a href="#s6">Work Plan</a><a href="#s7">Project Outputs</a><a href="#s8">Success Criteria</a><a href="#s9">Assumptions &amp; Limitations</a></nav>
 
@@ -329,6 +336,7 @@ main>nav a{border-radius:10px;font-size:15px;padding:8px 14px}
 <p><b>Kenapa dataset ini?</b> Data pelanggan perusahaan nyata bersifat rahasia. Dataset Telco Customer Churn dari IBM (tersedia di Kaggle) meniru data perusahaan telekomunikasi dan dipakai luas untuk latihan analisis. Karena publik, siapa pun bisa mengunduh data yang sama dan mengecek ulang angka di project ini.</p>
 <p><b>Ukuran:</b> sekitar 7.043 pelanggan dan 21 kolom dalam 1 file CSV (perkiraan, diverifikasi saat data diunduh). Setiap baris berisi profil pelanggan, 9 jenis layanan, kontrak dan tagihan, serta status churn. Tidak ada kolom tanggal, jadi pola waktu dibaca dari tenure.</p>
 <p><b>Catatan awal:</b> beberapa kolom perlu dirapikan, misalnya TotalCharges tersimpan sebagai teks dan SeniorCitizen memakai 0/1. Lisensi dan cara sitasi dicek di halaman dataset sebelum dipakai.</p>
+<p style="margin:8px 0 0">Sumber data: <a href="https://www.kaggle.com/datasets/blastchar/telco-customer-churn" target="_blank" rel="noopener">here</a> (Versi: 1, Tanggal akses: 23 Oktober 2026)</p>
 </div>
 <div class="callout g"><h4>Hipotesis yang akan diuji (belum terbukti)</h4>
 <p>1. Pelanggan kontrak Month-to-month jauh lebih sering churn daripada kontrak tahunan.</p>
@@ -471,7 +479,7 @@ $('bars').onclick=e=>{const r=e.target.closest('.row');if(r){sel=+r.dataset.i;dr
 
 const G=[["churn rate","i","Persentase pelanggan yang berhenti berlangganan.\nRumus: churn rate = pelanggan churn ÷ total pelanggan.\nContoh: 1.000 pelanggan, 265 berhenti, churn rate = 26,5%."],["churn","i","Pelanggan berhenti berlangganan dan tidak kembali."],["retention rate","i","Persentase pelanggan yang tetap berlangganan.\nRumus: retention rate = 1 − churn rate."],["lost MRR","i","Lost Monthly Recurring Revenue: total tagihan bulanan dari pelanggan yang churn.\nRumus: lost MRR = jumlah monthly charges semua pelanggan churn."],["ARPU","","Average Revenue Per User: rata-rata tagihan bulanan per pelanggan.\nRumus: ARPU = total monthly charges ÷ jumlah pelanggan."],["revenue terselamatkan","i","Estimasi revenue yang tidak hilang jika churn berhasil diturunkan.\nRumus: (churn lama − churn baru) × pelanggan segmen × ARPU × 12.\nContoh: churn turun dari 50% ke 40% di 2.000 pelanggan dengan ARPU US$ 80 = 200 × 80 × 12 = US$ 192.000 per tahun."],["tenure bucket","i","Kelompok lama berlangganan, misalnya 0–6 bulan atau 7–12 bulan."],["tenure","i","Berapa bulan pelanggan sudah berlangganan."],["kurva retensi","i","Grafik persentase pelanggan yang masih bertahan menurut lama berlangganan. Makin landai kurvanya, makin baik."],["segmen","i","Kelompok pelanggan dengan ciri yang sama, misalnya kontrak bulanan + Fiber optic."],["Month-to-month","","Kontrak bulanan tanpa ikatan jangka panjang. Pelanggan bisa berhenti kapan saja."],["Fiber optic","","Jenis internet berbasis serat optik, lebih cepat dan umumnya lebih mahal daripada DSL."],["Electronic check","","Metode bayar manual secara elektronik, tidak dipotong otomatis setiap bulan."],["paperless billing","i","Tagihan dikirim secara digital, bukan kertas."],["bundling","i","Pelanggan memakai beberapa layanan sekaligus dari satu perusahaan."],["monthly charges","i","Tagihan bulanan satu pelanggan."],["break-even","i","Titik impas: biaya program sama dengan revenue yang terselamatkan."],["tabel silang","i","Tabel yang membandingkan dua faktor sekaligus, misalnya kontrak × metode bayar."],["Pareto","i","Cara mengurutkan dari penyumbang terbesar. Biasanya sedikit segmen menyumbang sebagian besar kerugian."],["profiling","i","Pemeriksaan awal data: tipe kolom, nilai kosong, nilai unik, dan sebaran angka."],["dataset publik","i","Data yang dibagikan terbuka dan bisa diunduh siapa saja."],["Kaggle","","Situs komunitas data science yang menyediakan dataset dan kompetisi."],["PivotTable","i","Fitur Excel untuk meringkas dan menghitung data per kelompok."],["KPI","","Key Performance Indicator: angka kunci untuk menilai kinerja, misalnya churn rate."],["SQL","","Bahasa untuk meminta dan mengolah data dari tabel database."],["DuckDB","i","Database ringan dalam satu file, untuk menjalankan SQL tanpa server."],["dashboard","i","Halaman ringkasan interaktif berisi grafik dan angka kunci."],["Streamlit","i","Alat untuk membuat dashboard web memakai Python."],["view","i","Query SQL yang disimpan dengan nama, sehingga bisa dipanggil seperti tabel."],["kamus data","i","Dokumen yang menjelaskan arti, satuan, dan contoh isi setiap kolom."],["README","","Dokumen penjelasan project yang dibaca pertama kali di repositori GitHub."],["program retensi","i","Upaya mempertahankan pelanggan, misalnya diskon pindah ke kontrak tahunan."]];
 const TERMS=G.map(([t,f,d])=>({t,d,re:new RegExp('(?<![\\w-])'+t.replace(/[.*+?^${}()|[\]\\-]/g,'\\$&')+'(?![\\w-])',f)}));
-const SK='svg,.fx,.fbar,.oh,h1,h2,h3,nav,button,script,style,summary,.tm,.tag,.pri,.pill,.v,.l,.chip,.flow,th,#tip,.banner,.theme,.phase,.add,.tools b,b.t,table td:first-child,.wb';
+const SK='svg,.fx,.fbar,.oh,h1,h2,h3,nav,button,script,style,summary,.tm,.tag,.pri,.pill,.v,.l,.chip,.flow,th,#tip,.banner,.theme,.phase,.add,.tools b,b.t,table td:first-child,.wb,code';
 function wrapT(n,seen){let b=null;for(const x of TERMS){if(seen.has(x.t))continue;const m=x.re.exec(n.data);if(m&&(!b||m.index<b.i||(m.index==b.i&&m[0].length>b.l)))b={x,i:m.index,l:m[0].length}}
 if(!b)return;seen.add(b.x.t);const r=n.splitText(b.i),a=r.splitText(b.l),s=document.createElement('span');s.className='tm';s.tabIndex=0;s.dataset.d=b.x.d;s.textContent=r.data;r.replaceWith(s);wrapT(a,seen)}
 function hl(root,seen){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest(SK)?3:1}),ns=[];while(w.nextNode())ns.push(w.currentNode);ns.forEach(n=>wrapT(n,seen))}
