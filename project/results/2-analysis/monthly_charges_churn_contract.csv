@@ -1,0 +1,7 @@
+contract,churn,n,mean_charge,median_charge
+Month-to-month,No,2220,61.46,64.95
+Month-to-month,Yes,1655,73.02,79.05
+One year,No,1307,62.51,64.85
+One year,Yes,166,85.05,95.05
+Two year,No,1647,60.01,63.3
+Two year,Yes,48,86.78,97.28

@@ -1,0 +1,16 @@
+rank_all,contract,internet_service,payment_method,n,cut_pct,saved_revenue_year,breakeven_cost_per_customer_year,breakeven_cost_per_saved_customer
+1,Month-to-month,Fiber optic,Electronic check,1307,10,82545.78,63.16,1046.21
+1,Month-to-month,Fiber optic,Electronic check,1307,20,165091.56,126.31,1046.21
+1,Month-to-month,Fiber optic,Electronic check,1307,30,247637.34,189.47,1046.21
+2,Month-to-month,Fiber optic,Bank transfer (automatic),327,10,15780.57,48.26,1059.1
+2,Month-to-month,Fiber optic,Bank transfer (automatic),327,20,31561.14,96.52,1059.1
+2,Month-to-month,Fiber optic,Bank transfer (automatic),327,30,47341.72,144.78,1059.1
+3,Month-to-month,Fiber optic,Credit card (automatic),293,10,12879.36,43.96,1055.69
+3,Month-to-month,Fiber optic,Credit card (automatic),293,20,25758.71,87.91,1055.68
+3,Month-to-month,Fiber optic,Credit card (automatic),293,30,38638.07,131.87,1055.68
+4,Month-to-month,DSL,Electronic check,474,10,11348.23,23.94,591.05
+4,Month-to-month,DSL,Electronic check,474,20,22696.46,47.88,591.05
+4,Month-to-month,DSL,Electronic check,474,30,34044.69,71.82,591.05
+5,Month-to-month,Fiber optic,Mailed check,201,10,10109.76,50.3,991.15
+5,Month-to-month,Fiber optic,Mailed check,201,20,20219.52,100.59,991.15
+5,Month-to-month,Fiber optic,Mailed check,201,30,30329.28,150.89,991.15

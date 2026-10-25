@@ -1,0 +1,16 @@
+factor,level,churned,lost_mrr,churn_rate
+contract,Month-to-month,1655,120847.1,42.71
+contract,One year,166,14118.45,11.27
+contract,Two year,48,4165.3,2.83
+internet_service,Fiber optic,1297,114300.05,41.89
+internet_service,DSL,459,22529.2,18.96
+internet_service,No,113,2301.6,7.4
+payment_method,Electronic check,1071,84288.75,45.29
+payment_method,Bank transfer (automatic),258,20091.9,16.71
+payment_method,Credit card (automatic),232,17946.6,15.24
+payment_method,Mailed check,308,16803.6,19.11
+tenure_bucket,0-6 bulan,784,49896.1,52.94
+tenure_bucket,25-48 bulan,325,27462.5,20.39
+tenure_bucket,13-24 bulan,294,23081.65,28.71
+tenure_bucket,49-72 bulan,213,19632.45,9.51
+tenure_bucket,7-12 bulan,253,19058.15,35.89

@@ -1,0 +1,14 @@
+segment,n,churned,churn_rate,ci95_low,ci95_high,n_ok_reco
+Kontrak: Month-to-month,3875,1655,42.71,41.16,44.27,True
+Kontrak: One year,1473,166,11.27,9.75,12.99,True
+Kontrak: Two year,1695,48,2.83,2.14,3.73,True
+Month-to-month | Fiber optic | Electronic check,1307,789,60.37,57.69,62.98,True
+Month-to-month | Fiber optic | Bank transfer (automatic),327,149,45.57,40.25,50.98,True
+Month-to-month | Fiber optic | Credit card (automatic),293,122,41.64,36.14,47.36,True
+Month-to-month | DSL | Electronic check,474,192,40.51,36.18,44.98,True
+Month-to-month | Fiber optic | Mailed check,201,102,50.75,43.89,57.58,True
+Month-to-month | DSL | Mailed check,367,113,30.79,26.29,35.69,True
+One year | Fiber optic | Electronic check,196,51,26.02,20.38,32.58,True
+Month-to-month | DSL | Credit card (automatic),185,50,27.03,21.14,33.85,True
+One year | Fiber optic | Credit card (automatic),150,23,15.33,10.44,21.96,True
+One year | Fiber optic | Bank transfer (automatic),157,23,14.65,9.96,21.02,True

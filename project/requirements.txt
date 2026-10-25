@@ -1,0 +1,11 @@
+pandas>=2.0
+numpy
+duckdb>=1.0
+scipy
+matplotlib
+nbformat
+nbconvert
+ipykernel
+# opsional (dashboard Streamlit)
+streamlit
+plotly

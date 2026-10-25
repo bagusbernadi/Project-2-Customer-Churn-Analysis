@@ -1,0 +1,6 @@
+kpi_id,kpi,value,n
+K1,Churn rate (%),26.54,7043
+K2,Retention rate (%),73.46,7043
+K3,Lost MRR: tagihan bulanan pelanggan churn (US$),139130.85,1869
+K4,ARPU: rata-rata MonthlyCharges semua pelanggan (US$),64.76,7043
+K5,"Revenue terselamatkan per tahun, skenario churn 5 segmen teratas -20% (US$, estimated)",265327.39,2602

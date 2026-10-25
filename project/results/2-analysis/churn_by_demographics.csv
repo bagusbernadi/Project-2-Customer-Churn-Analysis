@@ -1,0 +1,9 @@
+factor,level,n,churned,churn_rate
+dependents,No,4933,1543,31.28
+dependents,Yes,2110,326,15.45
+gender,Female,3488,939,26.92
+gender,Male,3555,930,26.16
+partner,No,3641,1200,32.96
+partner,Yes,3402,669,19.66
+senior_citizen,Non-senior,5901,1393,23.61
+senior_citizen,Senior,1142,476,41.68

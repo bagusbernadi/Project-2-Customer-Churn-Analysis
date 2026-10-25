@@ -1,0 +1,25 @@
+internet_service,service_name,status,n,churned,churn_rate
+DSL,DeviceProtection,No,1356,342,25.22
+DSL,DeviceProtection,Yes,1065,117,10.99
+DSL,OnlineBackup,No,1335,343,25.69
+DSL,OnlineBackup,Yes,1086,116,10.68
+DSL,OnlineSecurity,No,1241,347,27.96
+DSL,OnlineSecurity,Yes,1180,112,9.49
+DSL,StreamingMovies,No,1440,322,22.36
+DSL,StreamingMovies,Yes,981,137,13.97
+DSL,StreamingTV,No,1464,332,22.68
+DSL,StreamingTV,Yes,957,127,13.27
+DSL,TechSupport,No,1243,345,27.76
+DSL,TechSupport,Yes,1178,114,9.68
+Fiber optic,DeviceProtection,No,1739,869,49.97
+Fiber optic,DeviceProtection,Yes,1357,428,31.54
+Fiber optic,OnlineBackup,No,1753,890,50.77
+Fiber optic,OnlineBackup,Yes,1343,407,30.31
+Fiber optic,OnlineSecurity,No,2257,1114,49.36
+Fiber optic,OnlineSecurity,Yes,839,183,21.81
+Fiber optic,StreamingMovies,No,1345,616,45.8
+Fiber optic,StreamingMovies,Yes,1751,681,38.89
+Fiber optic,StreamingTV,No,1346,610,45.32
+Fiber optic,StreamingTV,Yes,1750,687,39.26
+Fiber optic,TechSupport,No,2230,1101,49.37
+Fiber optic,TechSupport,Yes,866,196,22.63

@@ -1,0 +1,13 @@
+factor,n,levels,chi2,dof,p_value,cramers_v,rate_min,rate_max,gap_pts
+Tipe kontrak,7043,3,1184.6,2,5.86e-258,0.41,2.83,42.71,39.88
+Kelompok tenure,7043,5,927.3,4,2e-199,0.363,9.51,52.94,43.42
+Jenis internet,7043,3,732.3,2,9.57e-160,0.322,7.4,41.89,34.49
+Metode bayar,7043,4,648.1,3,3.68e-140,0.303,15.24,45.29,30.04
+Online Security (pelanggan internet),5517,2,435.1,1,1.29e-96,0.281,14.61,41.77,27.16
+Jumlah layanan tambahan (pelanggan internet),5517,4,431.1,3,3.97e-93,0.28,10.06,52.24,42.18
+Tech Support (pelanggan internet),5517,2,415.5,1,2.36e-92,0.274,15.17,41.64,26.47
+Paperless billing,7043,2,259.2,1,2.61e-58,0.192,16.33,33.57,17.24
+Dependents,7043,2,189.9,1,3.28e-43,0.164,15.45,31.28,15.83
+Senior citizen,7043,2,160.4,1,9.48e-37,0.151,23.61,41.68,18.08
+Partner,7043,2,159.4,1,1.52e-36,0.15,19.66,32.96,13.29
+Gender,7043,2,0.5,1,0.47,0.009,26.16,26.92,0.76

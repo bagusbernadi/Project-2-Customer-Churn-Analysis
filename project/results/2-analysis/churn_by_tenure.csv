@@ -1,0 +1,6 @@
+tenure_bucket_id,tenure_bucket,n,churned,churn_rate,share_of_churners
+1,0-6 bulan,1481,784,52.94,41.95
+2,7-12 bulan,705,253,35.89,13.54
+3,13-24 bulan,1024,294,28.71,15.73
+4,25-48 bulan,1594,325,20.39,17.39
+5,49-72 bulan,2239,213,9.51,11.4
