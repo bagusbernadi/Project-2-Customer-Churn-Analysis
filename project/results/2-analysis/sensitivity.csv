@@ -1,0 +1,10 @@
+metric,dasar,tanpa_tenure_0,tanpa_totalcharges_janggal,diff_pct_tanpa_tenure_0,flag_review
+churn_rate,26.537,26.578,26.586,0.16,False
+churn_M2M,42.71,42.71,42.721,0.0,False
+churn_TwoYear,2.832,2.849,2.85,0.59,False
+churn_Fiber,41.893,41.893,41.893,0.0,False
+churn_ElectronicCheck,45.285,45.285,45.285,0.0,False
+churn_tenure_0_6,52.937,53.333,53.406,0.75,False
+lost_mrr,139130.85,139130.85,139130.85,0.0,False
+top1_share_lost_mrr,49.077,49.077,49.077,0.0,False
+top1_segment,Month-to-month | Fiber optic | Electronic check,Month-to-month | Fiber optic | Electronic check,Month-to-month | Fiber optic | Electronic check,,False

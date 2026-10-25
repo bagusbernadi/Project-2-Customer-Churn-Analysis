@@ -1,0 +1,13 @@
+contract,addon_group,n,churned,churn_rate
+Month-to-month,0,670,359,53.58
+Month-to-month,1-2,1661,786,47.32
+Month-to-month,3-4,914,386,42.23
+Month-to-month,5-6,106,25,23.58
+One year,0,20,3,15.0
+One year,1-2,262,23,8.78
+One year,3-4,621,87,14.01
+One year,5-6,206,44,21.36
+Two year,0,3,0,0.0
+Two year,1-2,76,3,3.95
+Two year,3-4,435,23,5.29
+Two year,5-6,543,17,3.13

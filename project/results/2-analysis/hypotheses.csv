@@ -1,0 +1,6 @@
+id,hipotesis,bukti,kesimpulan
+H1,Kontrak Month-to-month jauh lebih sering churn daripada kontrak tahunan,M2M 42.7% vs One year 11.3% vs Two year 2.8%,Didukung
+H2,Churn paling tinggi di 12 bulan pertama,"0-6 bulan 52.9%, 7-12 bulan 35.9%, 13-24 bulan 28.7%",Didukung
+H3,Fiber optic dan Electronic check lebih sering churn,"Fiber vs DSL: mentah +22.93 poin, setelah strata +19.64; Electronic check vs lain: mentah +28.23, setelah strata +14.84","Didukung (selisih mengecil setelah kontrol kontrak dan tenure, tetapi tetap ada)"
+H4,Pelanggan dengan Online Security dan Tech Support lebih jarang churn,"Online Security: mentah -27.16 poin, setelah strata -12.85; Tech Support: mentah -26.47, setelah strata -10.56","Didukung (selisih mengecil setelah kontrol, tetapi tetap negatif)"
+H5,Sebagian besar revenue hilang berasal dari sedikit segmen,5 dari 34 segmen menyumbang 78.5% lost MRR dengan 36.9% pelanggan; segmen teratas saja 49.1%,Didukung

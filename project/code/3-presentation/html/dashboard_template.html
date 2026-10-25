@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Churn Telco</title>
+<style>
+:root{color-scheme:light dark;--bg:#F8F9FA;--card:#fff;--sub:#F1F3F4;--line:#DADCE0;--ink:#202124;--mut:#5F6368;--head:#174EA6;--blue:#1A73E8;--red:#D93025;--amber:#F9AB00;--green:#188038;--soft:#E8F0FE}
+@media (prefers-color-scheme:dark){:root{--bg:#181A1B;--card:#222527;--sub:#2B2F31;--line:#3C4043;--ink:#E8EAED;--mut:#9AA0A6;--head:#8AB4F8;--blue:#8AB4F8;--red:#F28B82;--amber:#FDD663;--green:#81C995;--soft:#26364F}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Segoe UI",Calibri,Arial,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:12px 16px 56px}
+header{padding:18px 0 6px}h1{margin:0;font-size:26px;color:var(--head)}header p{margin:4px 0 0;color:var(--mut);font-size:14px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0;display:flex;gap:6px;overflow-x:auto}
+nav a{flex:none;background:var(--card);border:1px solid var(--line);color:var(--ink);text-decoration:none;border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600}
+nav a:hover,nav a:focus-visible{background:var(--blue);color:var(--bg);outline:none}
+h2{font-size:22px;color:var(--head);margin:36px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+h3{font-size:17px;margin:0 0 8px;color:var(--head)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 18px;margin:10px 0}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,1fr)}.g5{grid-template-columns:repeat(5,1fr)}
+@media (max-width:820px){.g2{grid-template-columns:1fr}.g5{grid-template-columns:repeat(2,1fr)}}
+.kpi .v{display:block;font-size:24px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums;line-height:1.15}
+.kpi .l{display:block;font-weight:700;font-size:14px}.kpi .d{display:block;font-size:12.5px;color:var(--mut);margin-top:4px}
+.filters{display:grid;gap:8px}.frow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.frow b{font-size:13.5px;min-width:110px;color:var(--mut)}
+.chip{font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;border-radius:999px;padding:4px 12px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.chip[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:var(--bg)}
+.chip:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.reset{font:inherit;font-size:13.5px;font-weight:700;color:var(--blue);background:none;border:0;cursor:pointer;text-decoration:underline}
+.row{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:14px}
+.row .n{width:170px;flex:none;font-weight:600}.row .tr{flex:1;background:var(--sub);border-radius:7px;height:22px;position:relative;overflow:hidden}
+.row .b{position:absolute;inset:0 auto 0 0;border-radius:7px;background:var(--blue)}.row .b.hi{background:var(--red)}.row .b.lo{background:var(--green)}.row .b.sm{background:var(--mut);opacity:.45}
+.row .c{width:140px;flex:none;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;font-size:13px}
+@media (max-width:620px){.row .n{width:110px;font-size:12.5px}.row .c{width:96px;font-size:12px}}
+table{border-collapse:collapse;width:100%;font-size:14px}th{background:var(--soft);color:var(--head);text-align:left;padding:7px 10px}
+td{padding:6px 10px;border-bottom:1px solid var(--line);vertical-align:top}td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.scroll{overflow-x:auto}.note{font-size:13px;color:var(--mut)}.tag{display:inline-block;border-radius:999px;padding:0 8px;font-size:11.5px;font-weight:700;background:var(--amber);color:#3C2A00}
+.callout{border-left:5px solid var(--amber);background:var(--sub);border-radius:10px;padding:10px 14px;margin:10px 0;font-size:15px}
+svg text{fill:var(--ink);font-family:inherit}svg .ax{stroke:var(--line)}svg .gl{stroke:var(--line);stroke-dasharray:3 4}
+.ctl{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:10px 0}.ctl select,.ctl input{font:inherit}
+.ctl select{padding:5px 8px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);max-width:100%}
+.res{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:10px}.res div{background:var(--sub);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--mut)}
+.res b{display:block;font-size:22px;color:var(--head);font-variant-numeric:tabular-nums}@media (max-width:700px){.res{grid-template-columns:1fr 1fr}}
+footer{margin-top:40px;font-size:13px;color:var(--mut)}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Dashboard Churn Pelanggan Telco</h1>
+<p>Dataset sampel IBM Telco Customer Churn (7.043 pelanggan). Satu potret waktu; pola adalah asosiasi, bukan sebab-akibat. Semua angka dampak berlabel <b>estimated</b>.</p>
+</header>
+<nav aria-label="Bagian dashboard"><a href="#ringkasan">Ringkasan</a><a href="#segmen">Segmen churn</a><a href="#retensi">Retensi per tenure</a><a href="#revenue">Revenue &amp; skenario</a><a href="#batasan">Batasan</a></nav>
+
+<section id="ringkasan">
+<h2>1. Ringkasan</h2>
+<div class="card filters" id="filters" aria-label="Filter"></div>
+<div class="grid g5" id="kpis"></div>
+<div class="callout" id="insight"></div>
+</section>
+
+<section id="segmen">
+<h2>2. Segmen churn</h2>
+<p class="note">Setiap grup memakai filter dimensi lain, tetapi menampilkan semua level dimensinya sendiri. Batang abu-abu = n &lt; 30 (tidak dibaca). Angka di kanan: churn rate dan jumlah pelanggan (n).</p>
+<div class="grid g2" id="bars"></div>
+<div class="card"><h3>Segmen kontrak × internet × metode bayar (sesuai filter)</h3>
+<div class="scroll"><table id="segtab"></table></div>
+<p class="note">Label <span class="tag">n &lt; 100</span> = terlalu kecil untuk rekomendasi utama.</p></div>
+</section>
+
+<section id="retensi">
+<h2>3. Retensi per tenure</h2>
+<div class="card"><h3>Kurva retensi (Kaplan-Meier, pendekatan dari tenure)</h3>
+<div id="km"></div>
+<div class="scroll"><table id="kmtab"></table></div>
+<p class="note">Bukan kurva kohort sebenarnya: tidak ada tanggal bergabung/berhenti, dan kontrak adalah kontrak saat ini. Pelanggan kontrak tahunan hampir tidak bisa churn sebelum kontrak habis, jadi kurvanya tinggi di awal. Ujung kurva (tenure di atas ±60 bulan) berbasis sedikit pelanggan dan kurang andal.</p></div>
+<div class="card"><h3>Churn per kelompok tenure (sesuai filter)</h3><div id="tenurebars"></div></div>
+</section>
+
+<section id="revenue">
+<h2>4. Revenue &amp; skenario</h2>
+<div class="card"><h3>Revenue bulanan hilang (lost MRR) per segmen, seluruh data</h3>
+<div id="pareto"></div>
+<p class="note" id="paretonote"></p></div>
+<div class="card"><h3>Skenario program retensi <span class="tag">estimated</span></h3>
+<div class="ctl"><label>Segmen <select id="scseg" aria-label="Pilih segmen"></select></label>
+<label>Penurunan churn (relatif) <input id="scsl" type="range" min="0" max="50" value="20"> <output id="scout">20%</output></label></div>
+<div class="res" id="scres"></div>
+<p class="note">Revenue terselamatkan per tahun = (churn lama − churn baru) × pelanggan segmen × ARPU segmen × 12. Batas biaya impas = revenue terselamatkan ÷ pelanggan segmen. Asumsi: ARPU = rata-rata MonthlyCharges, USD, penurunan churn berlaku merata di segmen; efek program belum teruji.</p></div>
+</section>
+
+<section id="batasan">
+<h2>5. Batasan</h2>
+<div class="card"><ul>
+<li>Satu potret waktu, tanpa tanggal. Kurva retensi hanya pendekatan dari tenure.</li>
+<li>Pola belum tentu penyebab: setelah kontrak dan tenure disamakan, selisih Electronic check, Online Security, dan Tech Support mengecil sekitar separuh (lihat laporan).</li>
+<li>Segmen kecil mudah tampak ekstrem; selalu baca n dan interval kepercayaan.</li>
+<li>Dataset sampel buatan IBM; polanya bisa lebih rapi daripada data perusahaan nyata.</li>
+</ul></div>
+</section>
+<footer>Dibuat oleh <code>code/3-presentation/python/06_build_dashboard.py</code> dari <code>results/2-analysis/*.csv</code>. Data per pelanggan tidak disertakan, hanya agregat.</footer>
+</main>
+<script>
+const D=__DATA__;
+const MIN_N=30,MIN_N_RECO=100;
+const $=id=>document.getElementById(id);
+const f1=v=>v.toLocaleString('id-ID',{minimumFractionDigits:1,maximumFractionDigits:1})+'%';
+const n0=v=>Math.round(v).toLocaleString('id-ID');
+const usd=v=>'US$ '+n0(v);
+const DIMS=[{k:'c',t:'Tipe kontrak'},{k:'i',t:'Jenis internet'},{k:'p',t:'Metode bayar'},{k:'bl',t:'Kelompok tenure'}];
+const LEV={};DIMS.forEach(d=>{LEV[d.k]=[...new Set(D.cube.map(r=>r[d.k]))]});
+LEV.bl=[...new Map(D.cube.map(r=>[r.b,r.bl])).entries()].sort((a,b)=>a[0]-b[0]).map(e=>e[1]);
+LEV.c=['Month-to-month','One year','Two year'];
+const F={};DIMS.forEach(d=>F[d.k]=new Set());
+const pass=(r,skip)=>DIMS.every(d=>d.k===skip||F[d.k].size===0||F[d.k].has(r[d.k]));
+const agg=rs=>{const a={n:0,ch:0,sm:0,lm:0};rs.forEach(r=>{a.n+=r.n;a.ch+=r.ch;a.sm+=r.sm;a.lm+=r.lm});a.rate=a.n?100*a.ch/a.n:NaN;a.arpu=a.n?a.sm/a.n:NaN;return a};
+const TOT=agg(D.cube);
+
+function filters(){
+  $('filters').innerHTML=DIMS.map(d=>`<div class="frow"><b>${d.t}</b>${LEV[d.k].map(l=>`<button class="chip" data-k="${d.k}" data-l="${l}" aria-pressed="${F[d.k].has(l)}">${l}</button>`).join('')}</div>`).join('')+
+  `<div class="frow"><button class="reset" id="reset">Reset filter</button><span class="note">Kosong = semua. Pilih lebih dari satu level untuk menggabungkan.</span></div>`;
+  $('reset').onclick=()=>{DIMS.forEach(d=>F[d.k].clear());draw()};
+  $('filters').querySelectorAll('.chip').forEach(b=>b.onclick=()=>{const s=F[b.dataset.k];s.has(b.dataset.l)?s.delete(b.dataset.l):s.add(b.dataset.l);draw()});
+}
+function kpis(rs){
+  const a=agg(rs),small=a.n<MIN_N;
+  const items=[['Churn rate',small?'n kecil':f1(a.rate),`${n0(a.ch)} dari ${n0(a.n)} pelanggan`],
+  ['Retention rate',small?'n kecil':f1(100-a.rate),'100 − churn rate'],
+  ['Lost MRR',usd(a.lm),`tagihan bulanan pelanggan churn (${f1(TOT.lm?100*a.lm/TOT.lm:0)} dari total)`],
+  ['ARPU',a.n?'US$ '+a.arpu.toFixed(2).replace('.',','):'-','rata-rata MonthlyCharges'],
+  ['Pelanggan',n0(a.n),`${f1(100*a.n/TOT.n)} dari ${n0(TOT.n)}`]];
+  $('kpis').innerHTML=items.map(i=>`<div class="card kpi"><span class="l">${i[0]}</span><span class="v">${i[1]}</span><span class="d">${i[2]}</span></div>`).join('');
+  const top=D.pareto[0];
+  $('insight').innerHTML=`Seluruh data: churn <b>${f1(TOT.rate)}</b>. Segmen <b>${top.contract} · ${top.internet_service} · ${top.payment_method}</b> hanya ${f1(100*top.n/TOT.n)} dari pelanggan, tetapi menyumbang <b>${f1(top.share_lost_mrr)}</b> dari lost MRR (churn ${f1(top.churn_rate)}, n=${n0(top.n)}). Lima segmen teratas menyumbang ${f1(D.pareto[4].cum_share_lost_mrr)}.`;
+}
+function bars(){
+  $('bars').innerHTML=DIMS.map(d=>{
+    const rs=D.cube.filter(r=>pass(r,d.k));
+    const lv=LEV[d.k].map(l=>({l,a:agg(rs.filter(r=>r[d.k]===l))})).filter(x=>x.a.n>0);
+    const mx=Math.max(60,...lv.filter(x=>x.a.n>=MIN_N).map(x=>x.a.rate));
+    return `<div class="card"><h3>${d.t}</h3>`+lv.map(x=>{const sm=x.a.n<MIN_N,cls=sm?'sm':x.a.rate>=40?'hi':x.a.rate<=12?'lo':'';
+      return `<div class="row"><span class="n">${x.l}</span><span class="tr"><span class="b ${cls}" style="width:${sm?100:100*x.a.rate/mx}%"></span></span><span class="c">${sm?'n kecil':f1(x.a.rate)} (n=${n0(x.a.n)})</span></div>`}).join('')+`</div>`;
+  }).join('');
+  $('tenurebars').innerHTML=(()=>{const rs=D.cube.filter(r=>pass(r,'bl'));
+    return LEV.bl.map(l=>({l,a:agg(rs.filter(r=>r.bl===l))})).filter(x=>x.a.n>0).map(x=>{const sm=x.a.n<MIN_N;
+    return `<div class="row"><span class="n">${x.l}</span><span class="tr"><span class="b ${sm?'sm':x.a.rate>=40?'hi':''}" style="width:${sm?100:Math.min(100,100*x.a.rate/60)}%"></span></span><span class="c">${sm?'n kecil':f1(x.a.rate)} (n=${n0(x.a.n)})</span></div>`}).join('')})();
+}
+function segtab(rs){
+  const m=new Map();rs.forEach(r=>{const k=[r.c,r.i,r.p].join('|');if(!m.has(k))m.set(k,[]);m.get(k).push(r)});
+  const rows=[...m.entries()].map(([k,v])=>({k:k.split('|'),a:agg(v)})).sort((x,y)=>y.a.lm-x.a.lm).slice(0,12);
+  const tl=agg(rs).lm;
+  $('segtab').innerHTML=`<tr><th>Kontrak</th><th>Internet</th><th>Metode bayar</th><th class="num">n</th><th class="num">Churn</th><th class="num">ARPU</th><th class="num">Lost MRR</th><th class="num">% lost MRR</th></tr>`+
+   rows.map(r=>`<tr><td>${r.k[0]}</td><td>${r.k[1]}</td><td>${r.k[2]}</td><td class="num">${n0(r.a.n)}${r.a.n<MIN_N_RECO?' <span class="tag">n &lt; 100</span>':''}</td><td class="num">${r.a.n<MIN_N?'-':f1(r.a.rate)}</td><td class="num">${r.a.arpu.toFixed(2).replace('.',',')}</td><td class="num">${usd(r.a.lm)}</td><td class="num">${tl?f1(100*r.a.lm/tl):'-'}</td></tr>`).join('')||'<tr><td colspan=8>Tidak ada data untuk filter ini.</td></tr>';
+}
+const COL={'Month-to-month':'#D93025','One year':'#F9AB00','Two year':'#188038','Semua':'#5F6368'};
+function km(){
+  const W=680,H=300,L=44,B=34,T=12,R=12,x=m=>L+(W-L-R)*m/72,y=v=>T+(H-T-B)*(1-v/100);
+  const act=F.c.size?F.c:null;
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Kurva retensi per tipe kontrak" style="width:100%;height:auto">`;
+  for(const v of [0,25,50,75,100])s+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" font-size="11">${v}%</text>`;
+  for(const m of [0,12,24,36,48,60,72])s+=`<text x="${x(m)}" y="${H-14}" text-anchor="middle" font-size="11">${m}</text>`;
+  s+=`<text x="${(W+L)/2}" y="${H-1}" text-anchor="middle" font-size="11">Tenure (bulan)</text>`;
+  for(const g of Object.keys(D.km)){const pts=[[0,100],...D.km[g]],dim=act&&g!=='Semua'&&!act.has(g),op=dim?0.18:1;
+    s+=`<polyline fill="none" stroke="${COL[g]}" stroke-width="${g==='Semua'?2:2.5}" ${g==='Semua'?'stroke-dasharray="5 4"':''} opacity="${op}" points="${pts.map(p=>x(p[0])+','+y(p[1])).join(' ')}"/>`;}
+  const names=Object.keys(D.km);
+  s+=names.map((g,i)=>`<g transform="translate(${L+10+i*150},${T+4})"><line x1="0" x2="18" y1="0" y2="0" stroke="${COL[g]}" stroke-width="3"/><text x="23" y="4" font-size="12">${g}</text></g>`).join('')+`</svg>`;
+  $('km').innerHTML=s;
+  const at=(g,m)=>{const a=D.km[g].filter(p=>p[0]<=m);return a.length?a[a.length-1][1]:100};
+  $('kmtab').innerHTML=`<tr><th>Kelompok</th><th class="num">Bulan 6</th><th class="num">Bulan 12</th><th class="num">Bulan 24</th><th class="num">Bulan 48</th><th class="num">Bulan 72</th></tr>`+names.map(g=>`<tr><td>${g}</td>${[6,12,24,48,72].map(m=>`<td class="num">${f1(at(g,m))}</td>`).join('')}</tr>`).join('');
+}
+function pareto(){
+  const top=D.pareto.slice(0,10),mx=top[0].lost_mrr;
+  $('pareto').innerHTML=top.map(r=>`<div class="row"><span class="n" style="width:260px">${r.contract} · ${r.internet_service} · ${r.payment_method}</span><span class="tr"><span class="b ${r.n<MIN_N_RECO?'sm':''}" style="width:${100*r.lost_mrr/mx}%"></span></span><span class="c" style="width:200px">${usd(r.lost_mrr)} · ${f1(r.share_lost_mrr)} · kum. ${f1(r.cum_share_lost_mrr)}</span></div>`).join('');
+  $('paretonote').textContent=`10 segmen teratas dari ${D.pareto.length} segmen berchurn. Kolom kanan: lost MRR per bulan, porsi, kumulatif. Total lost MRR ${usd(TOT.lm)} per bulan dari ${n0(TOT.ch)} pelanggan churn.`;
+}
+function scen(){
+  const s=D.segs[$('scseg').value],x=+$('scsl').value/100;
+  $('scout').textContent=Math.round(x*100)+'%';
+  const nw=s.churn_rate*(1-x),saved=(s.churn_rate-nw)/100*s.n,rev=saved*s.arpu*12;
+  $('scres').innerHTML=`<div>Churn sekarang → sesudah<b>${f1(s.churn_rate)} → ${f1(nw)}</b></div><div>Pelanggan tertahan<b>${n0(saved)}</b> dari ${n0(s.n)}</div><div>Revenue terselamatkan/tahun (est.)<b>${usd(rev)}</b></div><div>Batas biaya impas / pelanggan segmen / tahun<b>${usd(rev/s.n)}</b></div>`;
+}
+function draw(){const rs=D.cube.filter(r=>pass(r));filters();kpis(rs);bars();segtab(rs);km();}
+$('scseg').innerHTML=D.segs.map((s,i)=>`<option value="${i}">${s.contract} · ${s.internet_service} · ${s.payment_method} (n=${n0(s.n)})</option>`).join('');
+$('scseg').onchange=scen;$('scsl').oninput=scen;
+draw();pareto();scen();
+</script>
+</body>
+</html>

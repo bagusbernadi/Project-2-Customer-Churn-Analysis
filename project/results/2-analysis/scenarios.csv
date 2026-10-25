@@ -1,0 +1,16 @@
+rank_all,contract,internet_service,payment_method,n,churn_rate,arpu,lost_mrr,cut_pct,churn_rate_new,customers_saved,saved_revenue_year
+1,Month-to-month,Fiber optic,Electronic check,1307,60.37,87.18,68281.5,10,54.33,78.9,82545.78
+1,Month-to-month,Fiber optic,Electronic check,1307,60.37,87.18,68281.5,20,48.3,157.8,165091.56
+1,Month-to-month,Fiber optic,Electronic check,1307,60.37,87.18,68281.5,30,42.26,236.7,247637.34
+2,Month-to-month,Fiber optic,Bank transfer (automatic),327,45.57,88.25,13062.1,10,41.01,14.9,15780.57
+2,Month-to-month,Fiber optic,Bank transfer (automatic),327,45.57,88.25,13062.1,20,36.46,29.8,31561.14
+2,Month-to-month,Fiber optic,Bank transfer (automatic),327,45.57,88.25,13062.1,30,31.9,44.7,47341.72
+3,Month-to-month,Fiber optic,Credit card (automatic),293,41.64,87.97,10731.15,10,37.48,12.2,12879.36
+3,Month-to-month,Fiber optic,Credit card (automatic),293,41.64,87.97,10731.15,20,33.31,24.4,25758.71
+3,Month-to-month,Fiber optic,Credit card (automatic),293,41.64,87.97,10731.15,30,29.15,36.6,38638.07
+4,Month-to-month,DSL,Electronic check,474,40.51,49.25,8776.45,10,36.46,19.2,11348.23
+4,Month-to-month,DSL,Electronic check,474,40.51,49.25,8776.45,20,32.41,38.4,22696.46
+4,Month-to-month,DSL,Electronic check,474,40.51,49.25,8776.45,30,28.36,57.6,34044.69
+5,Month-to-month,Fiber optic,Mailed check,201,50.75,82.59,8407.25,10,45.68,10.2,10109.76
+5,Month-to-month,Fiber optic,Mailed check,201,50.75,82.59,8407.25,20,40.6,20.4,20219.52
+5,Month-to-month,Fiber optic,Mailed check,201,50.75,82.59,8407.25,30,35.53,30.6,30329.28

@@ -1,0 +1,12 @@
+customerID,column,original,new,tenure,churn,reason
+4472-LVYGI,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+3115-CZMZD,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+5709-LVOEQ,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+4367-NUYAO,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+1371-DWPAZ,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+7644-OMVMY,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+3213-VVOLG,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+2520-SGTTA,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+2923-ARZLG,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+4075-WKNIU,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"
+2775-SEFEE,TotalCharges,' ',NULL,0,No,"Teks kosong diubah menjadi NULL; baris tidak dibuang (pelanggan baru, tenure 0, belum ada tagihan)"

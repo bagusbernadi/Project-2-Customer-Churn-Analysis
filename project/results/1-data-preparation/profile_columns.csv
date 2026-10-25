@@ -1,0 +1,22 @@
+column,kind,n_blank,n_unique,min,max,top_values
+customerID,text,0,7043,,,7590-VHVEG (1); 5575-GNVDE (1); 3668-QPYBK (1); 7795-CFOCW (1); 9237-HQITU (1)
+gender,text,0,2,,,Male (3555); Female (3488)
+SeniorCitizen,numeric,0,2,0,1,
+Partner,text,0,2,,,No (3641); Yes (3402)
+Dependents,text,0,2,,,No (4933); Yes (2110)
+tenure,numeric,0,73,0,72,
+PhoneService,text,0,2,,,Yes (6361); No (682)
+MultipleLines,text,0,3,,,No (3390); Yes (2971); No phone service (682)
+InternetService,text,0,3,,,Fiber optic (3096); DSL (2421); No (1526)
+OnlineSecurity,text,0,3,,,No (3498); Yes (2019); No internet service (1526)
+OnlineBackup,text,0,3,,,No (3088); Yes (2429); No internet service (1526)
+DeviceProtection,text,0,3,,,No (3095); Yes (2422); No internet service (1526)
+TechSupport,text,0,3,,,No (3473); Yes (2044); No internet service (1526)
+StreamingTV,text,0,3,,,No (2810); Yes (2707); No internet service (1526)
+StreamingMovies,text,0,3,,,No (2785); Yes (2732); No internet service (1526)
+Contract,text,0,3,,,Month-to-month (3875); Two year (1695); One year (1473)
+PaperlessBilling,text,0,2,,,Yes (4171); No (2872)
+PaymentMethod,text,0,4,,,Electronic check (2365); Mailed check (1612); Bank transfer (automatic) (1544); Credit card (automatic) (1522)
+MonthlyCharges,numeric,0,1585,18.25,118.75,
+TotalCharges,numeric,11,6531,18.8,8684.8,
+Churn,text,0,2,,,No (5174); Yes (1869)

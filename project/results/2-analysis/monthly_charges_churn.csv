@@ -1,0 +1,3 @@
+churn,n,mean_charge,median_charge,p25_charge,p75_charge
+No,5174,61.27,64.43,25.1,88.4
+Yes,1869,74.44,79.65,56.15,94.2

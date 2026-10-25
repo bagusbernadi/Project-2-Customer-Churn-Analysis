@@ -1,0 +1,7 @@
+contract,senior_group,n,churned,churn_rate
+Month-to-month,Non-senior,3068,1214,39.57
+Month-to-month,Senior,807,441,54.65
+One year,Non-senior,1283,137,10.68
+One year,Senior,190,29,15.26
+Two year,Non-senior,1550,42,2.71
+Two year,Senior,145,6,4.14
