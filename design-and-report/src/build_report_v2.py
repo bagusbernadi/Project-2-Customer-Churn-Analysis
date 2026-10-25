@@ -1,10 +1,10 @@
-"""Langkah 12: membuat index_v2.html (Design Project + Report Project versi 2, 7 bagian evaluasi).
+"""Langkah 12: membuat design-and-report/index.html (Design Project + Report Project versi 2, 7 bagian evaluasi).
 
-Pane Design disalin dari index.html tanpa perubahan (diverifikasi). Pane Report dibuat dari file hasil (CSV) di
+Pane Design disalin dari design-and-report/src/design_base.html tanpa perubahan (diverifikasi). Pane Report dibuat dari file hasil (CSV) di
 project/results/: setiap angka di teks diformat lewat helper yang mencatatnya, lalu diaudit (token numerik yang tidak berasal
 dari CSV, rancangan, atau daftar angka struktural membuat skrip berhenti). Klaim yang dihitung (mis. jumlah catatan) di-assert.
 
-Keluaran: index_v2.html di root repo. index.html lama tidak ditimpa.
+Keluaran: design-and-report/index.html. Jalankan dari mana saja: python design-and-report/src/build_report_v2.py
 """
 import html
 import re
@@ -13,12 +13,13 @@ from pathlib import Path
 
 import pandas as pd
 
-import sys as _sys, pathlib as _pl; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))  # project/code (common.py)
-from common import CODE, RES_ANALYSIS, RES_PREP, ROOT
+import sys as _sys, pathlib as _pl; _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "project" / "code"))  # common.py
+from common import RES_ANALYSIS, RES_PREP, ROOT
 
+HERE = Path(__file__).resolve().parent            # design-and-report/src
 REPO = ROOT.parent
-SRC, OUT = REPO / "index.html", REPO / "index_v2.html"
-CSS_V2 = (CODE / "3-presentation" / "html" / "report_v2.css").read_text(encoding="utf-8")
+SRC, OUT = HERE / "design_base.html", REPO / "design-and-report" / "index.html"
+CSS_V2 = (HERE / "report_v2.css").read_text(encoding="utf-8")
 
 # ------------------------------------------------------------------ pencatat angka
 USED: set[str] = set()
@@ -312,13 +313,13 @@ sec3 = f'''<h2 id="rp3">3. Apakah dataset sesuai dengan Design Project?<small>Pe
     ["Lisensi dan sitasi", "Dicek sebelum publikasi", "Belum diverifikasi", NO("Belum")]])}'''
 
 sec4 = f'''<h2 id="rp4">4. Apakah tools yang digunakan sesuai?<small>Perbandingan rancangan dengan eksekusi</small></h2>
-<div class="card"><p><b>Jawaban singkat:</b> tools inti (Python/pandas, DuckDB + SQL, Markdown) sesuai rancangan. Perubahan: dashboard utama berupa HTML statis (Streamlit tersedia sebagai opsional dan belum dipublikasikan), cek silang memakai pandas (bukan Excel), dan KPI dibuat sebagai tabel (bukan view). GitHub belum dipakai untuk mengunggah hasil.</p></div>
+<div class="card"><p><b>Jawaban singkat:</b> tools inti (Python/pandas, DuckDB + SQL, Markdown) sesuai rancangan. Perubahan: dashboard utama berupa HTML statis (Streamlit tersedia sebagai opsional dan belum dipublikasikan), cek silang memakai pandas (bukan Excel), dan KPI dibuat sebagai tabel (bukan view). Kode dan hasil sudah di GitHub (branch main, lewat pull request).</p></div>
 {table(["Tool", "Rancangan", "Realisasi", "Verdict"], [
     ["Python (pandas)", "Memuat CSV, cleaning, memecah tabel, skenario dampak", "Profiling dan audit (<code>01</code>), cek silang (<code>04</code>), validasi (<code>05</code>), pembuat dashboard dan notebook (<code>06</code>, <code>07</code>). Ditambah numpy, scipy, matplotlib", OK("Sesuai")],
     ["DuckDB + SQL", "Database 4 tabel; KPI sebagai view", f"File SQL 01 sampai 06 mengisi tabel dan hasil; {fmt(len(kp))} KPI dan hasil query dibuat sebagai <b>tabel</b> supaya mudah diekspor ke CSV", WARN("Sesuai, catatan")],
     ["Excel", "Opsional: cek silang PivotTable", "Tidak dibuat; diganti cek silang pandas", NO("Tidak dibuat")],
     ["Streamlit + Plotly", "Dashboard di Streamlit Community Cloud", "Aplikasi Streamlit dibuat dan lolos tes headless; <b>dashboard utama berupa HTML statis</b> satu file (bisa dibuka offline dan lewat GitHub Pages). Belum dipublikasikan ke link publik", WARN("Sebagian")],
-    ["GitHub", "Menyimpan kode, query, README", "Semua di-commit ke branch lokal; belum di-push", WARN("Sebagian")],
+    ["GitHub", "Menyimpan kode, query, README", "Semua di-commit dan sudah di branch main lewat pull request; struktur folder mengikuti Project 1", OK("Sesuai")],
     ["Markdown", "README", "README, definisi, kamus data, keputusan cleaning", OK("Sesuai")]])}'''
 
 # nama langkah rancangan -> realisasi (file yang benar-benar ada, dicek di bawah)
@@ -334,13 +335,14 @@ REAL = {
     9: ("project/results/2-analysis/scenarios.csv, project/results/2-analysis/breakeven.csv", "Sesuai", "Q11 dan Q12, berlabel estimated"),
     10: ("project/code/2-analysis/python/05_validation.py", "Sesuai", "Chi-square, interval Wilson, standardisasi strata, sensitivitas, hipotesis"),
     11: ("project/code/3-presentation/python/06_build_dashboard.py, project/code/3-presentation/streamlit/app.py", "Sebagian", "Dashboard HTML selesai; Streamlit belum dipublikasikan"),
-    12: ("README.md, index.html, index_v2.html", "Sesuai", "README dan laporan terisi; GitHub belum di-push")}
+    12: ("README.md, design-and-report/index.html", "Sesuai", "README dan laporan terisi; hasil sudah di GitHub (branch main)")}
 for k, (files, *_r) in REAL.items():
     for f in files.split(", "):
-        assert (REPO / f).exists() or f in ("index_v2.html",), f
+        assert (REPO / f).exists() or f == "design-and-report/index.html", f
 vpill = {"Sesuai": OK, "Berbeda": WARN, "Sebagian": WARN}
 rows5 = [[fmt(i), e(t), "<br>".join(f"<code>{x}</code>" for x in REAL[int(i)][0].split(", ")), vpill[REAL[int(i)][1]](REAL[int(i)][1]), e(REAL[int(i)][2])] for i, t in STEPS]
-RENAME = [("scripts/clean_load.py", "project/code/1-data-preparation/python/01_profile_audit.py dan 02_build_tables.py"),
+RENAME = [("index.html", "design-and-report/index.html (index.html di root hanya pengalihan)"),
+          ("scripts/clean_load.py", "project/code/1-data-preparation/python/01_profile_audit.py dan 02_build_tables.py"),
           ("sql/", "project/code/1-data-preparation/sql/ dan project/code/2-analysis/sql/"),
           ("notebooks/analysis.ipynb", "project/results/3-presentation/analysis.ipynb"),
           ("outputs/", "project/results/1-data-preparation/ dan project/results/2-analysis/"),
@@ -360,14 +362,14 @@ OUT_STATUS = {
     "Skrip cleaning & pemuat data": ("Tercapai", "<code>01_profile_audit.py</code>, <code>02_build_tables.py</code>, <code>cleaning_log.csv</code>"),
     "Notebook analisis": ("Tercapai", "<code>project/results/3-presentation/analysis.ipynb</code>, dieksekusi tanpa error"),
     "Laporan temuan & rekomendasi": ("Tercapai", "Tab Report Project (halaman ini) dan README, dengan angka dari file hasil"),
-    "Repositori GitHub": ("Sebagian", "Struktur repositori siap dan di-commit lokal; belum di-push ke GitHub"),
+    "Repositori GitHub": ("Tercapai", "Struktur mengikuti Project 1 (<code>design-and-report/</code>, <code>project/</code>, README) dan sudah di branch main"),
     "Slide presentasi": ("Tidak dibuat", "Belum dibuat (Opsional)")}
 assert [t for t, _ in OUTS] == list(OUT_STATUS), [t for t, _ in OUTS]
 def outrow(t, lab):
     s_, b_ = OUT_STATUS[t]
     return [f"<b>{e(t)}</b>", lab, {"Tercapai": OK, "Sebagian": WARN}.get(s_, NO)(s_), b_]
 rows6 = [outrow(t, l) for t, l in OUTS]
-DOCSTAT = {"index.html": ("index.html", "Ada"), "docs/kpi_definitions.md": ("project/docs/definitions.md", "Ada, nama berbeda"),
+DOCSTAT = {"index.html": ("design-and-report/index.html", "Ada, folder berbeda"), "docs/kpi_definitions.md": ("project/docs/definitions.md", "Ada, nama berbeda"),
            "docs/data_dictionary.md": ("project/docs/data_dictionary.md", "Ada"), "data/README.md": ("project/data/README.md", "Ada"),
            "data/raw/telco_churn.csv": ("project/data/raw/telco_churn.csv", "Ada, tidak di-commit"),
            "scripts/clean_load.py": ("project/code/1-data-preparation/python/02_build_tables.py", "Ada, nama berbeda"),
@@ -381,7 +383,7 @@ rowsd = []
 for name, isi, tahap, label in DOCS:
     real, st = DOCSTAT[name]
     if real and "tidak di-commit" not in st:
-        assert (REPO / real).exists(), real
+        assert (REPO / real).exists() or real == "design-and-report/index.html", real
     rowsd.append([f"<code>{e(name)}</code>", e(isi), (f"<code>{real}</code>" if real else "-"), (OK if st.startswith("Ada") and "berbeda" not in st else WARN if st.startswith("Ada") else NO)(st), label])
 n_missing = sum(1 for r in rowsd if "pill d" in r[3])
 n_out_ok = sum(1 for r in rows6 if "pill d" not in r[2] and "pill p" not in r[2])
