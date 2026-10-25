@@ -2,7 +2,7 @@
 
 # Project 2: Customer Churn Driver Analysis (Telco)
 
-**Status: Selesai (versi 1).** Rancangan dan laporan ada di [`index.html`](index.html), tab *Design Project* dan *Report Project*. Dashboard interaktif: [`project/results/3-presentation/dashboard.html`](project/results/3-presentation/dashboard.html).
+**Status: Selesai (versi 1).** Rancangan dan laporan ada di [`design-and-report/index.html`](design-and-report/index.html), tab *Design Project* dan *Report Project* (laporan versi 2, 7 bagian evaluasi). Dashboard interaktif: [`project/results/3-presentation/dashboard.html`](project/results/3-presentation/dashboard.html).
 
 **Tujuan:** membangun analisis dan dashboard yang menunjukkan segmen pelanggan (tipe kontrak, lama berlangganan, layanan, dan metode bayar) dengan churn dan revenue hilang terbesar, sehingga program retensi dapat difokuskan pada segmen yang paling berharga untuk dipertahankan.
 
@@ -120,13 +120,19 @@ python code/3-presentation/python/06_build_dashboard.py     # results/3-presenta
 python code/3-presentation/python/07_build_notebook.py
 jupyter nbconvert --to notebook --execute --inplace results/3-presentation/analysis.ipynb
 # opsional: streamlit run code/3-presentation/streamlit/app.py
+cd ..
+python design-and-report/src/build_report_v2.py              # design-and-report/index.html (angka dari CSV, diaudit otomatis)
 ```
 Catatan: nama skrip dan folder berbeda dari usulan awal di halaman rancangan (`scripts/clean_load.py`, `dashboard/app.py`, dan seterusnya); mengikuti struktur Project 1 (kode dan hasil dipisah per tahap).
 
 ## Struktur repository
+Sama dengan Project 1: halaman, kode, dan hasil dipisah. Di dalam `project/` kode dan hasil dipisah lagi per tahap (1 data-preparation, 2 analysis, 3 presentation).
 ```
 README.md                      ringkasan project (file ini)
-index.html                     halaman Design Project dan Report Project (GitHub Pages)
+index.html                     pengalihan ke design-and-report/ (agar URL GitHub Pages tetap)
+design-and-report/
+  index.html                   halaman Design Project dan Report Project (v2)
+  src/                         sumber halaman: design_base.html (rancangan), report_v2.css, build_report_v2.py
 project/
   code/                        PROGRAM
     common.py                  jalur dan konstanta bersama

@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Project 2: Customer Churn Telco</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Rancangan project portofolio Data Analyst: analisis pemicu churn pelanggan telekomunikasi dan revenue yang hilang, dengan SQL dan dashboard.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: tema terang ala Google (single theme, sengaja): latar putih keabuan, kartu putih;
+   biru = struktur, kuning = penanda utama, hijau = info pendukung, merah = aksen.
+   Skala huruf: H1 32 · H2 25 · H3 19 · body 16.5 · keterangan 14 · label 12.5 */
+:root{color-scheme:light;
+--bg:#F8F9FA;--card:#FFFFFF;--sub:#F1F3F4;--line:#DADCE0;
+--ink:#202124;--head:#174EA6;--mut:#5F6368;
+--navy:#1A73E8;--navy-ink:#FFFFFF;--teal:#188038;--amber:#FBBC04;--amber-ink:#3C2A00;--bar:#1A73E8;--soft:#E8F0FE;
+--gb:#4285F4;--gr:#EA4335;--gy:#FBBC04;--gg:#34A853;
+--navyH:#1A73E8;--amberH:#B06000;--tealH:#188038;--plumH:#9334E6;--roseH:#D93025;--skyH:#1967D2;--onph:#fff;
+--f:"Source Sans 3",Calibri,Carlito,"Segoe UI",Arial,sans-serif;
+--h1:clamp(26px,2.6vw,32px);--h2:clamp(21px,2vw,25px);--h3:19px;--body:16.5px;--small:14px;--label:12.5px}
+[hidden]{display:none!important}
+*{box-sizing:border-box}html{scroll-padding-top:64px;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 var(--body)/1.6 var(--f)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+main{max-width:880px;margin:0 auto;padding-block:16px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+b,strong{font-weight:700}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);padding:8px 0;display:flex;gap:6px;overflow-x:auto}
+nav a{flex:none;background:var(--card);border:1px solid var(--line);color:var(--ink);text-decoration:none;border-radius:999px;padding:6px 14px;font-size:var(--small);font-weight:600}
+nav a:hover,nav a:focus-visible{background:var(--amber);border-color:var(--amber);color:var(--amber-ink);outline:none}
+.banner{background:var(--navy);color:var(--navy-ink);border-radius:18px;padding:22px 26px}
+.banner h1{margin:0 0 8px;font-size:var(--h1);font-weight:800;line-height:1.2;text-wrap:balance;letter-spacing:-.01em}.banner p{margin:0;font-size:18px;line-height:1.55;opacity:.97}.banner .goal b{font-weight:800}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.tags{align-items:center}.tlab{font-size:var(--small);font-weight:700;margin-right:4px;opacity:.95}
+.tag{border-radius:999px;padding:3px 12px;font-size:var(--label);font-weight:700;background:rgba(255,255,255,.2);letter-spacing:.02em}.tag.a{background:var(--amber);color:var(--amber-ink)}
+.card{border-radius:16px;padding:16px 20px;background:var(--card);border:1px solid var(--line);margin:12px 0}
+.card p{margin:8px 0}
+h2{font-size:var(--h2);font-weight:800;color:var(--head);margin:48px 0 10px;padding-bottom:8px;border-bottom:2px solid var(--line);line-height:1.25;text-wrap:balance}
+h2 small{display:block;font-size:var(--small);font-weight:400;color:var(--mut);margin-top:4px}
+h3{font-size:var(--h3);font-weight:700;color:var(--head);margin:16px 0 6px;line-height:1.3}
+.card h3:first-child,.card>div>h3:first-child{margin-top:4px}
+.add{display:inline-block;vertical-align:middle;margin-left:8px;border-radius:999px;padding:2px 10px;font-size:var(--label);font-weight:700;background:var(--teal);color:#fff}
+.how{background:var(--soft);border-radius:12px;padding:12px 16px;margin:10px 0;font-size:var(--small);line-height:1.55;color:var(--ink)}.how::before{content:"Cara membaca ";font-weight:700;color:var(--teal)}
+.callout{border-radius:14px;padding:14px 20px;margin:12px 0;font-size:16px}.callout h4{margin:0 0 6px;font-size:var(--h3);font-weight:700}.callout p{margin:6px 0}
+.callout.a{background:var(--amber);color:var(--amber-ink)}.callout.g{background:var(--teal);color:#fff}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}.kpis .card{margin:0}
+.kpi .v{font-size:30px;font-weight:800;display:block;line-height:1.15;color:var(--head);font-variant-numeric:tabular-nums}.kpi .l{display:block;font-weight:700;font-size:16px;margin-top:2px}.kpi .d{display:block;font-size:var(--small);line-height:1.4;margin-top:6px;color:var(--mut)}
+.kpi.t{background:var(--teal);border-color:var(--teal);color:#fff}.kpi.am{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}
+.kpi.t .v,.kpi.t .d,.kpi.am .v,.kpi.am .d{color:inherit}
+table{border-collapse:collapse;width:100%;font-size:15px;background:var(--card);border-radius:12px;overflow:hidden}
+th{background:var(--navy);color:var(--navy-ink);padding:9px 12px;text-align:left;vertical-align:top;font-weight:700}
+td{padding:8px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:nth-child(odd) td{background:var(--sub)}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:10px 0}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:6px 0;display:grid;grid-template-columns:40px 1fr;gap:4px 8px;font-size:16px;line-height:1.45}
+.q .id{font-weight:800;color:var(--head)}.q .m{grid-column:2;font-size:var(--small);color:var(--mut)}
+.pri{display:inline-block;border-radius:999px;padding:1px 9px;font-size:var(--label);font-weight:700;margin-left:6px;background:var(--sub);border:1px solid var(--line);color:var(--mut)}.pri.M{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}.pri.S{background:var(--navy);border-color:var(--navy);color:#fff}
+.theme{font-size:var(--label);font-weight:700;color:var(--teal);margin:20px 0 4px;text-transform:uppercase;letter-spacing:.08em}
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0}
+.flow span{border-radius:999px;padding:5px 12px;font-size:var(--small);font-weight:700;background:var(--sub);border:1px solid var(--line)}
+.flow span.ng{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}.flow span.ok{background:var(--teal);border-color:var(--teal);color:#fff}.flow i{font-style:normal;color:var(--mut);font-size:var(--small)}
+.row{display:flex;align-items:center;gap:8px;margin:6px 0;width:100%;font:inherit;font-size:var(--small);color:var(--ink);background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.row .n{width:96px;flex:none;font-weight:600}.row .tr{flex:1;background:var(--sub);border-radius:8px;height:24px;position:relative;overflow:hidden}
+.row .b{position:absolute;left:0;top:0;bottom:0;border-radius:8px;background:var(--bar);transition:width .25s}
+.row.sel .b{background:var(--amber)}.row.sel .n{color:var(--head);font-weight:800}
+.row .c{width:58px;text-align:right;flex:none;font-variant-numeric:tabular-nums;font-weight:600}
+.row:focus-visible{outline:3px solid var(--amber);outline-offset:2px;border-radius:8px}
+.ctl{display:flex;align-items:center;gap:12px;margin:14px 0 10px;font-weight:700;font-size:15px}.ctl input{flex:1;accent-color:#F2A541}.ctl output{min-width:48px;text-align:right}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.res div{background:var(--sub);border-radius:12px;padding:10px 14px;font-size:var(--small);color:var(--mut)}.res b{display:block;font-size:24px;font-weight:800;color:var(--head);font-variant-numeric:tabular-nums}
+.steps{counter-reset:s;display:grid;gap:8px;margin:10px 0;padding:0;list-style:none}
+.steps li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 54px;position:relative}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:14px;top:12px;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;font-weight:700;display:grid;place-items:center;font-size:14px}
+.steps li.L::before{background:var(--amber);color:var(--amber-ink)}
+.steps b.t{display:block;font-size:17px;color:var(--head);line-height:1.3}.steps p{margin:6px 0;font-size:15px;line-height:1.5}.steps .meta{font-size:13px;color:var(--mut)}
+.phase{font-size:var(--label);font-weight:700;color:var(--teal);margin:18px 0 0;text-transform:uppercase;letter-spacing:.08em}
+.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:12px 0}.tools .card{margin:0}
+.tools b{display:block;font-size:var(--h3);color:var(--head)}.tools .r{font-size:15px;margin:6px 0 0}.tools .alt{font-size:var(--small);color:var(--mut);margin:8px 0 0;padding-top:8px;border-top:1px dashed var(--line)}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:8px 0}summary{cursor:pointer;font-weight:700;font-size:17px;color:var(--head)}details p{font-size:15.5px}
+.pill{border-radius:999px;padding:1px 9px;font-size:var(--label);font-weight:700;background:var(--teal);color:#fff;margin-left:4px}.pill.d{background:var(--sub);border:1px solid var(--line);color:var(--mut)}
+.chip{display:inline-block;border-radius:999px;padding:3px 11px;margin:3px 4px 3px 0;font-size:var(--small);font-weight:600;background:var(--sub);border:1px solid var(--line)}
+.tm{border-bottom:2px dotted var(--amber);background:rgba(242,165,65,.16);border-radius:4px;padding:0 2px;cursor:help}
+#tip{position:fixed;display:none;max-width:320px;white-space:pre-line;background:#202124;color:#fff;padding:10px 12px;border-radius:12px;font-size:var(--small);line-height:1.4;z-index:20;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+ul.tight{margin:6px 0;padding-left:20px}ul.tight li{margin:5px 0}
+.intro>.layout{grid-column:1/-1}
+.layout{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}.layout .lead{margin:4px 0 10px;max-width:90ch}
+.figw{overflow-x:auto;margin:8px 0}.figw svg{display:block;width:100%;min-width:860px;height:auto;font-family:var(--f)}
+.figw .lane{fill:var(--sub)}.figw .box{fill:var(--card);stroke:var(--line);stroke-width:1.5}.figw .box.hi{stroke:var(--bar);stroke-width:2.5}
+.figw text{fill:var(--ink)}.figw .ln{font-size:15px;font-weight:700;fill:var(--head)}.figw .gl{font-size:13px;font-weight:700;fill:var(--teal);letter-spacing:.03em}
+.figw .bt{font-size:13px}.figw .b{font-size:15px;font-weight:700}.figw .st{font-size:13px;fill:var(--mut)}
+.figw .grp{stroke:var(--teal);stroke-width:2}.figw .ar{stroke:var(--bar);stroke-width:2}.figw .ah{fill:var(--bar)}
+.figw .ng,.figw .ngs{stroke:var(--amber);stroke-width:2;stroke-dasharray:5 4}.figw .aha{fill:var(--amber)}.figw .nl{font-size:14px;font-weight:700;fill:var(--amberH)}
+.figw .dt{stroke:var(--mut);stroke-width:2;stroke-dasharray:2 4}
+.figw .okb{fill:var(--teal)}.figw .scb{fill:var(--amber)}.figw .wt{fill:#fff;font-size:14px;font-weight:700}.figw .at{fill:var(--amber-ink);font-size:14px;font-weight:700}
+.figw .mk{fill:var(--amber)}.figw .mt{fill:var(--amber-ink);font-size:14px;font-weight:800}
+.legend{counter-reset:l;list-style:none;padding:0;margin:10px 0 0;display:grid;gap:10px}
+.legend li{counter-increment:l;position:relative;padding-left:38px;font-size:15.5px;line-height:1.55}
+.legend li::before{content:counter(l);position:absolute;left:0;top:1px;width:26px;height:26px;border-radius:50%;background:var(--amber);color:var(--amber-ink);font-weight:800;font-size:14px;display:grid;place-items:center}
+@media (min-width:1000px){.legend{grid-template-columns:repeat(4,1fr);gap:16px}}
+.kpi{--h:var(--navyH);background:color-mix(in srgb,var(--h) 11%,var(--card));border-color:color-mix(in srgb,var(--h) 35%,var(--card))}
+.kpi .v{color:var(--h)}.kpi .l{color:var(--ink)}.kpi .d{color:var(--mut)}
+.q[data-p="M"]{background:color-mix(in srgb,var(--amber) 13%,var(--card));border-color:color-mix(in srgb,var(--amber) 60%,var(--card))}
+.q[data-p="S"]{background:color-mix(in srgb,var(--skyH) 9%,var(--card));border-color:color-mix(in srgb,var(--skyH) 35%,var(--card))}
+.q[data-p="N"]{border-style:dashed}
+.q[data-p="M"] .id{color:var(--amberH)}.q[data-p="S"] .id{color:var(--skyH)}.q[data-p="N"] .id{color:var(--mut)}
+.pri.S{background:var(--skyH);border-color:var(--skyH);color:var(--onph)}
+.fbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:12px 0 4px}.fbar span{font-size:var(--small);font-weight:700;color:var(--mut);margin-right:2px}
+.fb{font:inherit;font-size:var(--small);font-weight:700;cursor:pointer;border-radius:999px;padding:6px 14px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.fb i{font-style:normal;opacity:.7;margin-left:4px}.fb:hover{border-color:var(--bar)}.fb:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.fb.on{background:var(--navy);border-color:var(--navy);color:#fff}.fb.on[data-f="M"]{background:var(--amber);border-color:var(--amber);color:var(--amber-ink)}.fb.on[data-f="S"]{background:var(--skyH);border-color:var(--skyH);color:var(--onph)}
+.defs p{margin:0 0 12px}.defs p:last-child{margin:0}
+.fx{display:inline-block;margin:2px 0;padding:1px 9px;border-radius:8px;background:color-mix(in srgb,var(--tealH) 12%,var(--card));border:1px solid color-mix(in srgb,var(--tealH) 40%,var(--card));color:var(--tealH);font-weight:700;font-size:15px;white-space:normal}
+.figw.fl svg{min-width:520px;max-width:1000px;margin:0 auto}.flowfull .card{padding:20px 24px}.flowfull .card>p{text-align:center;margin:12px 0 0}.figw .dia{fill:var(--sub);stroke:var(--bar);stroke-width:2}.figw .b2{font-size:14px;font-weight:700}
+.figw .arT{fill:none;stroke:var(--teal);stroke-width:2}.figw .aht{fill:var(--teal)}.figw .arA{fill:none;stroke:var(--amber);stroke-width:2}.figw .aha2{fill:var(--amber)}
+.figw .lt{font-size:13px;font-weight:700;fill:var(--tealH)}.figw .la{font-size:13px;font-weight:700;fill:var(--amberH)}
+.ph .phase{color:var(--ph);font-size:13.5px}
+.ph .steps li{background:color-mix(in srgb,var(--ph) 8%,var(--card));border-color:color-mix(in srgb,var(--ph) 32%,var(--card))}
+.ph .steps li::before,.ph .steps li.L::before{background:var(--ph);color:var(--onph)}
+.ph .steps b.t{color:var(--ink)}
+.steps li.L::after{content:"beban besar";position:absolute;right:12px;top:12px;font-size:11.5px;font-weight:700;letter-spacing:.03em;padding:1px 8px;border-radius:999px;border:1px solid var(--ph,var(--amber));color:var(--ph,var(--amber))}
+.steps li.L b.t{padding-right:84px}
+.banner{background:linear-gradient(120deg,#1A73E8,#4285F4)}
+h2{border-bottom:3px solid transparent;border-image:linear-gradient(90deg,var(--gb) 0 60px,var(--line) 60px) 1}
+nav a:nth-child(4n+1):hover{background:var(--gb);border-color:var(--gb);color:#fff}nav a:nth-child(4n+2):hover{background:var(--gr);border-color:var(--gr);color:#fff}nav a:nth-child(4n+4):hover{background:var(--gg);border-color:var(--gg);color:#fff}
+.callout.g{background:#E6F4EA;color:#0D652D;border:1px solid #A8DAB5}.callout.g h4{color:#137333}
+.callout.a{background:#FEF7E0;color:#3C2A00;border:1px solid #FDD663}
+.outs{display:grid;gap:12px;margin:12px 0}.outs .card{margin:0}
+.out{--h:var(--navyH);border-top:4px solid var(--h)}
+.out .oh{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.out .oh b{font-size:var(--h3);color:var(--h);line-height:1.3}
+.ob{flex:none;border-radius:999px;padding:1px 9px;font-size:var(--label);font-weight:700;background:var(--amber);color:var(--amber-ink)}.ob.opt{background:var(--sub);border:1px solid var(--line);color:var(--mut)}
+.out ul{margin:8px 0 0;padding-left:18px;font-size:15px;line-height:1.5}.out li{margin:4px 0}
+.out li:nth-last-child(-n+2){color:var(--mut);font-size:14px}
+@media (min-width:700px){.outs{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1280px){.outs{grid-template-columns:repeat(4,1fr)}}
+/* layar lebar: nav jadi sidebar, konten dibagi kolom */
+.two{display:grid;gap:0 24px;align-items:start}.two>*{min-width:0}
+.qgrid{display:grid;gap:0 12px}.qgrid>*{min-width:0}
+@media (min-width:1000px){
+main{max-width:1480px}
+.two,.qgrid{grid-template-columns:1fr 1fr}.qgrid .theme{grid-column:1/-1}
+.kpis{grid-template-columns:repeat(6,1fr)}.tools{grid-template-columns:repeat(3,1fr)}
+.intro{display:grid;grid-template-columns:1fr 1fr;column-gap:28px;align-items:start}.intro h3{grid-column:1/-1}.intro>p{grid-column:1}.intro>.scroll{grid-column:2;grid-row:2/span 3;margin-top:8px}
+.phases{display:grid;grid-template-columns:repeat(2,1fr);gap:0 24px}.phases>*{min-width:0}
+}
+@media (min-width:1280px){
+main{display:grid;grid-template-columns:190px minmax(0,1fr);column-gap:32px}
+main>*{grid-column:2}
+main>nav{grid-column:1;grid-row:1/span 60;align-self:start;flex-direction:column;padding-top:16px}
+main>nav a{border-radius:10px;font-size:15px;padding:8px 14px}
+.phases{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:620px){.kpis,.res{grid-template-columns:1fr 1fr}.tools{grid-template-columns:1fr}.row .n{width:78px}.banner{padding:18px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.row .b{transition:none}}
+/* tambahan */
+.card a{color:var(--navy);font-weight:600}
+.row .n{width:130px}
+.tag.c1{background:#188038;color:#fff}.tag.c2{background:#9334E6;color:#fff}.tag.c3{background:#D93025;color:#fff}.tag.c4{background:#fff;color:#174EA6}
+.wf{display:grid;gap:0}
+.wrow{display:grid;gap:0}
+.wl{--c:var(--navyH);background:color-mix(in srgb,var(--c) 8%,var(--card));border:1px solid color-mix(in srgb,var(--c) 30%,var(--card));border-radius:14px;padding:12px 14px 14px;min-width:0}
+.wl h4{margin:0 0 6px;color:var(--c);font-size:13.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.ws{display:grid;gap:24px;padding-top:8px}
+.wb{position:relative;background:var(--card);border:2px solid var(--c);border-radius:12px;padding:10px 12px 10px 54px;font-size:15px;line-height:1.35;min-height:56px}
+.wb .n{position:absolute;left:12px;top:10px;width:30px;height:30px;border-radius:50%;background:var(--c);color:var(--onph);display:grid;place-items:center;font-weight:800;font-size:14px}
+.wb b{display:block;color:var(--ink)}.wb .s{display:block;font-size:13px;color:var(--mut);margin-top:2px}
+.wb.L::before{content:"beban besar";position:absolute;top:-11px;right:10px;background:var(--amber);color:var(--amber-ink);font-size:11px;font-weight:700;padding:0 8px;border-radius:999px;line-height:20px}
+.wb::after{content:"↓";position:absolute;left:50%;bottom:-23px;transform:translateX(-50%);color:var(--c);font-weight:800;font-size:16px}
+.ws>.wb:last-child::after{content:none}
+.wsep{text-align:center;color:var(--mut);font-weight:800;font-size:20px;line-height:28px}.wsep::before{content:"↓"}
+@media (min-width:1200px){
+.wrow{grid-template-columns:2fr 30px 3fr;align-items:stretch}
+.wrow>.wsep{display:grid;place-items:center}.wrow>.wsep::before{content:"→"}
+.ws{grid-template-columns:repeat(var(--k),minmax(0,1fr));gap:22px}
+.wl[style*="--k:5"] .ws{grid-template-columns:repeat(5,minmax(0,1fr))}
+.wb::after{content:"→";left:auto;right:-19px;bottom:auto;top:50%;transform:translateY(-50%)}
+}
+@media (max-width:620px){.row .n{width:112px;font-size:13px}}
+
+.tab{flex:none;font:inherit;font-size:15px;font-weight:800;cursor:pointer;background:var(--card);border:2px solid var(--line);color:var(--ink);border-radius:999px;padding:6px 16px}
+.tab[data-t=design]{--c:var(--navy)}.tab[data-t=report]{--c:var(--teal)}
+.tab:hover{border-color:var(--c)}.tab.on{background:var(--c);border-color:var(--c);color:#fff}.tab:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.links{display:contents}.links[data-tab=design]{--ac:var(--navy)}.links[data-tab=report]{--ac:var(--teal)}
+.links a{font-size:13.5px;font-weight:600;color:var(--mut);padding:5px 12px}
+.pane code{font-size:.92em;background:var(--sub);border-radius:4px;padding:1px 5px;overflow-wrap:anywhere}
+.pane pre{background:var(--sub);border:1px solid var(--line);border-radius:12px;padding:12px 16px;overflow-x:auto;font-size:14px;line-height:1.5}.pane pre code{background:none;padding:0;overflow-wrap:normal}
+.pill.p{background:var(--amber);color:var(--amber-ink)}
+.callout a{color:inherit;font-weight:700;text-decoration:underline}
+@media (min-width:1280px){
+main>nav{gap:8px}
+.tab{border-radius:12px;font-size:16px;padding:12px 16px;text-align:left;border-left:8px solid var(--c)}
+.links{display:flex;flex-direction:column;gap:2px;margin:0 0 8px 12px;padding-left:12px;border-left:3px solid var(--ac)}
+main>nav .links a{background:none;border:0;border-radius:8px;font-size:14.5px;font-weight:600;color:var(--mut);padding:6px 10px}
+main>nav .links a:hover,main>nav .links a:focus-visible{background:var(--soft);color:var(--head)}
+}
+</style>
+
+</head>
+<body>
+<a href="https://bagusbernadi.github.io/" style="display:inline-block;margin:12px 16px;font:600 14px/1.4 'Source Sans 3',Arial,sans-serif;color:#1A73E8;text-decoration:none">← All projects / Semua project</a>
+<main>
+<nav aria-label="Project navigation"><button type="button" class="tab on" data-t="design" aria-expanded="true" aria-controls="design">Design Project</button><div class="links" data-tab="design"><a href="#s1">Background</a><a href="#s2">Business Questions</a><a href="#s3">Churn &amp; Revenue Loss</a><a href="#s4">Dataset</a><a href="#s5">Tools</a><a href="#s6">Work Plan</a><a href="#s7">Project Outputs</a><a href="#s8">Success Criteria</a><a href="#s9">Assumptions &amp; Limitations</a></div><button type="button" class="tab" data-t="report" aria-expanded="false" aria-controls="report">Report Project</button><div class="links" data-tab="report" hidden><a href="#rp1">Problem</a><a href="#rp2">Data</a><a href="#rp3">Analysis</a><a href="#rp4">Recommendation</a><a href="#rp5">Impact</a><a href="#rp6">Batasan</a></div></nav>
+
+<header class="banner"><h1>Project 2: Customer Churn Driver Analysis (Telco)</h1>
+<p class="goal"><b>Tujuan project:</b> membangun analisis dan dashboard yang menunjukkan segmen pelanggan (tipe kontrak, lama berlangganan, layanan, dan metode bayar) dengan <span class="tm" tabindex="0" data-d="Churn: pelanggan berhenti berlangganan dan tidak kembali.&#10;Contoh: dari 100 pelanggan, 26 berhenti berlangganan, berarti ada 26 pelanggan churn.">churn</span> dan revenue hilang terbesar, sehingga program retensi dapat difokuskan pada segmen yang paling berharga untuk dipertahankan.</p>
+<div class="tags"><span class="tlab">Kategori:</span><span class="tag a">Rancangan project</span><span class="tag c1">Telekomunikasi (Tech / Energi)</span><span class="tag c2">Dataset publik</span><span class="tag c3">SQL + dashboard</span></div></header>
+
+<div class="pane" id="design" data-tab="design">
+<section class="card intro">
+<h3>Project Introduction</h3>
+<p>Bayangkan sebuah gym dengan 7.000 anggota. Ada anggota yang membayar paket bulanan, ada yang paket satu tahun, ada yang dua tahun. Sebagian anggota menambah fasilitas seperti loker, kelas, atau personal trainer. Setiap bulan, sebagian anggota berhenti dan tidak kembali.</p>
+<p>Pemilik gym ingin tahu tiga hal: anggota seperti apa yang paling sering berhenti, kapan mereka paling rawan berhenti, dan berapa iuran yang hilang setiap bulan karena mereka pergi. Dengan jawaban itu, promo bisa diberikan ke anggota yang tepat, bukan dibagi rata ke semua orang.</p>
+<div class="scroll"><table><tr><th>Di gym</th><th>Di perusahaan telekomunikasi</th></tr>
+<tr><td>Anggota gym</td><td>Pelanggan layanan telepon dan internet</td></tr>
+<tr><td>Paket bulanan, 1 tahun, 2 tahun</td><td>Tipe kontrak: Month-to-month, One year, Two year</td></tr>
+<tr><td>Fasilitas tambahan (loker, kelas, trainer)</td><td>Layanan tambahan, misalnya Online Security, Tech Support, Streaming TV</td></tr>
+<tr><td>Lama menjadi anggota</td><td>Tenure: berapa bulan pelanggan sudah berlangganan</td></tr>
+<tr><td>Anggota berhenti</td><td>Churn: pelanggan berhenti berlangganan</td></tr>
+<tr><td>Iuran bulanan yang hilang</td><td>Lost MRR: tagihan bulanan dari pelanggan yang churn</td></tr>
+</table></div>
+<p>Project ini membangun <b>analisis penyebab churn dan dashboard</b>: data pelanggan dimasukkan ke satu database, dihitung per segmen, lalu ditampilkan dalam dashboard yang menunjukkan segmen mana yang paling banyak pergi dan berapa revenue yang hilang. Datanya adalah dataset publik, jadi hasilnya bisa dicek ulang oleh siapa saja. Kata bergaris bawah putus-putus kuning bisa diklik untuk melihat artinya.</p>
+<div class="layout">
+<h3>Gambaran alur kerja di perusahaan telekomunikasi</h3>
+<p class="lead">Perjalanan pelanggan bisa dibayangkan sebagai tiga jalur. Dua jalur pertama terjadi di bisnis sehari-hari. Jalur ketiga adalah yang dibangun di project ini.</p>
+<div class="figw"><svg viewBox="0 0 1240 432" role="img" aria-label="Alur pelanggan telekomunikasi: jalur pelanggan dari mendaftar sampai tagihan bulanan, jalur churn ketika pelanggan berhenti dan revenue hilang, dan jalur data menuju database, dashboard, dan keputusan program retensi"><defs><marker id="mN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker><marker id="mA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="aha" d="M0 0L10 5L0 10z"/></marker></defs>
+<rect class="lane" x="0" y="8" width="1240" height="130" rx="14"/><rect class="lane" x="0" y="150" width="1240" height="140" rx="14"/><rect class="lane" x="0" y="302" width="1240" height="128" rx="14"/>
+<text class="ln" x="18" y="78">Jalur</text><text class="ln" x="18" y="96">pelanggan</text><text class="ln" x="18" y="218">Jalur</text><text class="ln" x="18" y="236">churn</text><text class="ln" x="18" y="362">Jalur</text><text class="ln" x="18" y="380">data</text>
+<line class="grp" x1="150" x2="660" y1="40" y2="40"/><text class="gl" x="405" y="32" text-anchor="middle">Awal: bergabung</text>
+<line class="grp" x1="690" x2="1180" y1="40" y2="40"/><text class="gl" x="935" y="32" text-anchor="middle">Setiap bulan: bertahan atau berhenti</text>
+<rect class="box" x="150" y="52" width="150" height="60" rx="10"/><text class="bt" x="225" y="78" text-anchor="middle">Mendaftar</text><text class="bt" x="225" y="95" text-anchor="middle">jadi pelanggan</text>
+<line class="ar" x1="300" x2="326" y1="82" y2="82" marker-end="url(#mN)"/>
+<rect class="box" x="330" y="52" width="150" height="60" rx="10"/><text class="bt" x="405" y="78" text-anchor="middle">Memilih</text><text class="bt" x="405" y="95" text-anchor="middle">tipe kontrak</text>
+<line class="ar" x1="480" x2="506" y1="82" y2="82" marker-end="url(#mN)"/>
+<rect class="box" x="510" y="52" width="150" height="60" rx="10"/><text class="bt" x="585" y="78" text-anchor="middle">Memilih layanan</text><text class="bt" x="585" y="95" text-anchor="middle">&amp; metode bayar</text>
+<line class="ar" x1="660" x2="686" y1="82" y2="82" marker-end="url(#mN)"/>
+<rect class="box" x="690" y="52" width="150" height="60" rx="10"/><text class="bt" x="765" y="78" text-anchor="middle">Tagihan</text><text class="bt" x="765" y="95" text-anchor="middle">bulanan</text>
+<line class="ar" x1="840" x2="896" y1="82" y2="82" marker-end="url(#mN)"/>
+<rect class="okb" x="900" y="64" width="280" height="36" rx="18"/><text class="wt" x="1040" y="87" text-anchor="middle">Stay: tetap berlangganan</text>
+<line class="ng" x1="765" x2="765" y1="112" y2="198" marker-end="url(#mA)"/><text class="nl" x="776" y="166">Churn</text>
+<rect class="box" x="150" y="202" width="440" height="52" rx="10"/><text class="bt b" x="370" y="224" text-anchor="middle">Pemicu yang dicari</text><text class="st" x="370" y="244" text-anchor="middle">tipe kontrak, tenure, layanan, metode bayar</text>
+<line class="dt" x1="590" x2="686" y1="228" y2="228" marker-end="url(#mN)"/>
+<rect class="box" x="690" y="202" width="150" height="52" rx="10"/><text class="bt b" x="765" y="233" text-anchor="middle">Pelanggan pergi</text>
+<line class="ar" x1="840" x2="896" y1="228" y2="228" marker-end="url(#mN)"/>
+<rect class="scb" x="900" y="211" width="280" height="34" rx="17"/><text class="at" x="1040" y="233" text-anchor="middle">Revenue bulanan hilang</text>
+<rect class="box" x="150" y="336" width="200" height="62" rx="10"/><text class="bt b" x="250" y="362" text-anchor="middle">Data pelanggan</text><text class="st" x="250" y="382" text-anchor="middle">CSV publik, ±7.043 baris</text>
+<line class="ar" x1="350" x2="396" y1="367" y2="367" marker-end="url(#mN)"/>
+<rect class="box hi" x="400" y="336" width="200" height="62" rx="10"/><text class="bt b" x="500" y="362" text-anchor="middle">Database</text><text class="st" x="500" y="382" text-anchor="middle">DuckDB + SQL</text>
+<line class="ar" x1="600" x2="646" y1="367" y2="367" marker-end="url(#mN)"/>
+<rect class="box hi" x="650" y="336" width="200" height="62" rx="10"/><text class="bt b" x="750" y="362" text-anchor="middle">Dashboard</text><text class="st" x="750" y="382" text-anchor="middle">Streamlit</text>
+<line class="ar" x1="850" x2="896" y1="367" y2="367" marker-end="url(#mN)"/>
+<rect class="box" x="900" y="336" width="200" height="62" rx="10"/><text class="bt b" x="1000" y="362" text-anchor="middle">Keputusan</text><text class="st" x="1000" y="382" text-anchor="middle">program retensi tepat sasaran</text>
+<line class="dt" x1="250" x2="250" y1="258" y2="332" marker-end="url(#mN)"/><text class="st" x="260" y="318" text-anchor="start">profil, layanan, tagihan, dan status churn tiap pelanggan dicatat</text>
+<text class="gl" x="625" y="422" text-anchor="middle">Bagian yang dibangun di project ini</text><line class="grp" x1="400" x2="850" y1="404" y2="404"/>
+<circle class="mk" cx="130" cy="58" r="13"/><text class="mt" x="130" y="63" text-anchor="middle">1</text>
+<circle class="mk" cx="745" cy="150" r="13"/><text class="mt" x="745" y="155" text-anchor="middle">2</text>
+<circle class="mk" cx="130" cy="208" r="13"/><text class="mt" x="130" y="213" text-anchor="middle">3</text>
+<circle class="mk" cx="130" cy="342" r="13"/><text class="mt" x="130" y="347" text-anchor="middle">4</text></svg></div>
+<ol class="legend">
+<li><b>Jalur pelanggan.</b> Pelanggan mendaftar, memilih tipe kontrak, memilih layanan dan cara membayar, lalu menerima tagihan setiap bulan. Seperti anggota gym yang memilih paket dan fasilitas.</li>
+<li><b>Bertahan atau berhenti.</b> Setiap bulan pelanggan memutuskan tetap berlangganan (Stay) atau berhenti (churn). Yang berhenti membawa pergi tagihan bulanannya.</li>
+<li><b>Jalur churn.</b> Project mencari pemicu churn: kontrak, lama berlangganan, layanan, dan metode bayar. Semakin jelas pemicunya, semakin mudah mencegah pelanggan pergi.</li>
+<li><b>Jalur data.</b> Data semua pelanggan dimasukkan ke database, dihitung per segmen, lalu ditampilkan di dashboard. Hasilnya dipakai untuk memilih segmen yang paling layak diberi program retensi.</li>
+</ol>
+</div>
+</section>
+
+<div class="kpis">
+<div class="card kpi" style="--h:var(--navyH)"><span class="v">14</span><span class="l">pertanyaan analisis</span><span class="d">Hal yang ingin dijawab dari data, 9 di antaranya prioritas utama (bagian 2).</span></div>
+<div class="card kpi" style="--h:var(--amberH)"><span class="v">5</span><span class="l">ukuran kinerja (KPI)</span><span class="d">Angka kunci di dashboard, dengan rumus yang disepakati sejak awal (bagian 3).</span></div>
+<div class="card kpi" style="--h:var(--tealH)"><span class="v">12</span><span class="l">langkah pengerjaan</span><span class="d">Dari menyepakati definisi sampai project siap ditinjau (bagian 6).</span></div>
+<div class="card kpi" style="--h:var(--plumH)"><span class="v">7.043 / 21</span><span class="l">pelanggan / kolom</span><span class="d">Satu baris per pelanggan (perkiraan, diverifikasi saat data diunduh).</span></div>
+<div class="card kpi" style="--h:var(--roseH)"><span class="v">0–72 bulan</span><span class="l">rentang <span class="tm" tabindex="0" data-d="Berapa bulan pelanggan sudah berlangganan.">tenure</span></span><span class="d">Data satu potret waktu; pola waktu dibaca dari tenure (perkiraan, diverifikasi saat data diunduh).</span></div>
+<div class="card kpi" style="--h:var(--skyH)"><span class="v">4</span><span class="l">tabel data</span><span class="d">Profil pelanggan, akun &amp; tagihan, layanan, dan kelompok tenure (bagian 4).</span></div>
+</div>
+
+<h2 id="s1">1. Background<small>Kenapa tema ini dipilih</small></h2>
+<div class="card two">
+<div><h3>Latar belakang masalah</h3>
+<p>Perusahaan telekomunikasi kehilangan sebagian pelanggan setiap bulan. Mendapatkan pelanggan baru umumnya jauh lebih mahal daripada mempertahankan pelanggan lama. Masalahnya, tim marketing sering tidak tahu pelanggan mana yang perlu dipertahankan. Akibatnya:</p>
+<ul class="tight">
+<li>Promo dan diskon dibagi rata ke semua pelanggan, termasuk pelanggan yang sebenarnya tidak berniat pergi.</li>
+<li>Revenue yang hilang karena churn hanya terlihat sebagai angka total, tanpa tahu segmen mana penyumbang terbesarnya.</li>
+<li>Tidak jelas kapan pelanggan paling rawan pergi, misalnya di bulan-bulan pertama berlangganan.</li>
+<li>Keputusan program retensi diambil berdasarkan dugaan, sehingga sulit menilai apakah program itu sepadan dengan biayanya.</li>
+</ul></div>
+<div><h3>Alasan memilih tema ini sebagai portofolio</h3>
+<ul class="tight">
+<li><b>Data publik yang mudah diverifikasi.</b> Dataset dikenal luas, sehingga recruiter bisa mengecek ulang angka. Project ini juga menunjukkan analisis segmentasi, tren, dan dampak untuk bisnis berbasis pelanggan.</li>
+<li><b>Menunjukkan skill inti Data Analyst.</b> Membersihkan data, menulis SQL per segmen, menghitung revenue yang hilang, dan menyampaikan rekomendasi bisnis lewat dashboard.</li>
+<li><b>Tingkat kesulitan mudah.</b> Analisisnya deskriptif (persentase, tabel silang, kurva retensi) tanpa model prediksi, dan datanya publik serta sudah dikenal recruiter.</li>
+<li><b>Terhubung dengan project lain.</b> Pola segmentasi dan perhitungan dampak dipakai lagi di Sales &amp; Customer Dashboard (#9), A/B Test Analysis (#11) untuk menguji program retensi, Cohort &amp; RFM Segmentation (#22), dan Customer Behavioral Segmentation (#34).</li>
+</ul></div>
+</div>
+
+<h2 id="s2">2. Business Questions<small>Satu pertanyaan utama, dipecah menjadi pertanyaan yang lebih kecil</small></h2>
+<div class="callout a"><h4>Pertanyaan utama</h4>Segmen pelanggan mana (tipe kontrak, tenure, layanan, metode bayar) yang paling banyak churn, dan berapa revenue bulanan yang hilang dari segmen tersebut?</div>
+<p class="how">Pertanyaan utama terlalu besar untuk dijawab sekaligus, jadi dipecah per tema. Label "Utama" berarti wajib dijawab dan dikerjakan lebih dulu. "Pendukung" memperdalam hasil. "Tambahan" dikerjakan jika waktu tersisa. Teks abu-abu di bawah tiap pertanyaan adalah cara menjawabnya.</p>
+
+<div class="fbar" role="group" aria-label="Filter pertanyaan"><span>Tampilkan:</span><button type="button" class="fb on" data-f="*">Semua <i>14</i></button><button type="button" class="fb" data-f="M">Utama <i>9</i></button><button type="button" class="fb" data-f="S">Pendukung <i>4</i></button><button type="button" class="fb" data-f="N">Tambahan <i>1</i></button></div>
+<div class="qgrid" id="qg">
+<p class="theme">Churn: seberapa banyak pelanggan pergi</p>
+<div class="q" data-p="M"><span class="id">Q1</span><span>Berapa churn rate keseluruhan, dan seberapa jauh bedanya antara kontrak Month-to-month, One year, dan Two year?<span class="pri M">Utama</span></span><span class="m">Churn rate per tipe kontrak</span></div>
+<div class="q" data-p="M"><span class="id">Q2</span><span>Di kelompok tenure mana churn paling tinggi, misalnya di 6 atau 12 bulan pertama?<span class="pri M">Utama</span></span><span class="m">Churn rate per tenure bucket</span></div>
+<div class="q" data-p="S"><span class="id">Q3</span><span>Bagaimana bentuk kurva retensi untuk tiap tipe kontrak?<span class="pri S">Pendukung</span></span><span class="m">Kurva retensi pendekatan dari tenure</span></div>
+
+<p class="theme">Segmen: siapa yang paling berisiko</p>
+<div class="q" data-p="M"><span class="id">Q4</span><span>Jenis internet dan layanan tambahan apa (Online Security, Tech Support, dll) yang berkaitan dengan churn tinggi atau rendah?<span class="pri M">Utama</span></span><span class="m">Churn rate per layanan, selisih ada vs tidak ada layanan</span></div>
+<div class="q" data-p="S"><span class="id">Q5</span><span>Apakah pelanggan dengan lebih banyak layanan (bundling) lebih jarang churn?<span class="pri S">Pendukung</span></span><span class="m">Churn rate per jumlah layanan</span></div>
+<div class="q" data-p="M"><span class="id">Q6</span><span>Apakah metode bayar dan paperless billing berkaitan dengan churn?<span class="pri M">Utama</span></span><span class="m">Churn rate per metode bayar, tabel silang</span></div>
+<div class="q" data-p="M"><span class="id">Q7</span><span>Kombinasi segmen mana (kontrak × internet × metode bayar) yang churn-nya tinggi dan jumlah pelanggannya cukup besar?<span class="pri M">Utama</span></span><span class="m">Tabel silang + batas minimal jumlah pelanggan per segmen</span></div>
+<div class="q" data-p="S"><span class="id">Q8</span><span>Apakah faktor demografi (senior citizen, punya partner, punya tanggungan) ikut berpengaruh?<span class="pri S">Pendukung</span></span><span class="m">Churn rate per kelompok demografi</span></div>
+
+<p class="theme">Revenue: berapa uang yang hilang</p>
+<div class="q" data-p="M"><span class="id">Q9</span><span>Berapa revenue bulanan yang hilang dari pelanggan churn, dan segmen mana penyumbang terbesarnya?<span class="pri M">Utama</span></span><span class="m">Lost MRR per segmen, Pareto revenue hilang</span></div>
+<div class="q" data-p="S"><span class="id">Q10</span><span>Apakah pelanggan yang churn membayar tagihan bulanan lebih tinggi daripada yang bertahan?<span class="pri S">Pendukung</span></span><span class="m">Perbandingan distribusi monthly charges</span></div>
+
+<p class="theme">Dampak: jika dicegah, hasilnya apa</p>
+<div class="q" data-p="M"><span class="id">Q11</span><span>Jika churn di segmen teratas turun sekian persen, berapa revenue yang terselamatkan per tahun?<span class="pri M">Utama</span></span><span class="m">Revenue terselamatkan = (churn lama − churn baru) × pelanggan segmen × ARPU × 12</span></div>
+<div class="q" data-p="N"><span class="id">Q12</span><span>Berapa biaya program retensi per pelanggan yang masih sepadan dengan revenue yang terselamatkan?<span class="pri">Tambahan</span></span><span class="m">Analisis break-even</span></div>
+
+<p class="theme">Validitas: apakah datanya bisa dipercaya</p>
+<div class="q" data-p="M"><span class="id">Q13</span><span>Berapa baris data yang bermasalah, dan apakah hasil berubah setelah data itu diperbaiki atau dibuang?<span class="pri M">Utama</span></span><span class="m">Audit kualitas data</span></div>
+<div class="q" data-p="M"><span class="id">Q14</span><span>Apakah angka KPI dari database sama persis dengan hitungan manual di Excel?<span class="pri M">Utama</span></span><span class="m">Cek silang SQL vs Excel</span></div>
+</div>
+
+<h2 id="s3">3. Churn &amp; Revenue Loss<span class="add">Komponen tambahan</span><small>Bagaimana pelanggan bertahan atau pergi, dan bagaimana churn tiap segmen membentuk revenue yang hilang</small></h2>
+<p class="how">Laporan bisnis sering memakai rumus churn yang berbeda-beda. Karena itu definisi ditetapkan di awal. Arahkan kursor atau klik kata yang diberi garis bawah kuning untuk melihat pengertian dan rumusnya.</p>
+<div class="flowfull"><h3>Alur keputusan pelanggan</h3>
+<div class="card"><div class="figw fl"><svg viewBox="0 0 640 270" role="img" aria-label="Diagram percabangan: pelanggan aktif menerima tagihan; yang bertahan lanjut ke bulan berikutnya, yang churn bisa ditawari program retensi; jika menerima pelanggan bertahan, jika menolak revenue hilang"><defs><marker id="fN" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="ah" d="M0 0L10 5L0 10z"/></marker><marker id="fT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="aht" d="M0 0L10 5L0 10z"/></marker><marker id="fA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="aha2" d="M0 0L10 5L0 10z"/></marker></defs>
+<rect class="box" x="8" y="113" width="96" height="44" rx="10"/><text class="b2" x="56" y="132" text-anchor="middle">Active</text><text class="b2" x="56" y="148" text-anchor="middle">Customer</text>
+<line class="ar" x1="104" x2="140" y1="135" y2="135" marker-end="url(#fN)"/>
+<polygon class="dia" points="142,135 190,101 238,135 190,169"/><text class="b2" x="190" y="140" text-anchor="middle" style="font-size:13px">Monthly Bill</text>
+<polyline class="arT" points="190,101 190,40 266,40" marker-end="url(#fT)"/><text class="lt" x="198" y="74">Stay</text>
+<rect class="okb" x="270" y="20" width="150" height="40" rx="20"/><text class="wt" x="345" y="45" text-anchor="middle">Next Month</text>
+<polyline class="arA" points="190,169 190,230 266,230" marker-end="url(#fA)"/><text class="la" x="198" y="205">Churn</text>
+<rect class="box" x="270" y="208" width="100" height="44" rx="10"/><text class="b2" x="320" y="227" text-anchor="middle">Retention</text><text class="b2" x="320" y="243" text-anchor="middle">Offer</text>
+<line class="ar" x1="370" x2="390" y1="230" y2="230" marker-end="url(#fN)"/>
+<polygon class="dia" points="392,230 446,196 500,230 446,264"/><text class="b2" x="446" y="235" text-anchor="middle" style="font-size:13px">Accepted?</text>
+<polyline class="arT" points="446,196 446,135 526,135" marker-end="url(#fT)"/><text class="lt" x="454" y="170">Yes</text>
+<rect class="okb" x="530" y="113" width="104" height="44" rx="22"/><text class="wt" x="582" y="140" text-anchor="middle">Retained</text>
+<line class="arA" x1="500" x2="526" y1="230" y2="230" marker-end="url(#fA)"/><text class="la" x="512" y="220" text-anchor="middle">No</text>
+<rect class="scb" x="530" y="210" width="104" height="40" rx="20"/><text class="at" x="582" y="235" text-anchor="middle">Lost Revenue</text></svg></div>
+<p>Dataset hanya mencatat hasil akhir: pelanggan bertahan (Stay) dan pelanggan pergi (Churn). Jalur Retention Offer adalah usulan tindakan, dan dampaknya dihitung sebagai <b>estimasi</b> di Q11.</p></div></div>
+
+<h3>Kenapa churn harus dibaca per segmen</h3>
+<p class="how">Setiap batang adalah churn rate satu segmen (angka contoh, bukan hasil dari data). Churn rata-rata terlihat sedang, tetapi satu segmen menyumbang sebagian besar pelanggan yang pergi. M2M adalah singkatan Month-to-month. Klik sebuah segmen lalu geser slider untuk menurunkan churn di segmen itu, dan lihat estimasi revenue yang terselamatkan per tahun.</p>
+<div class="card"><div id="bars"></div>
+<div class="ctl"><label for="sl">Turunkan churn segmen terpilih</label><input id="sl" type="range" min="0" max="50" value="20"><output id="slo" for="sl">20%</output></div>
+<div class="res"><div>Churn rate saat ini<b id="r1"></b></div><div>Churn rate setelah program<b id="r2"></b></div><div>Revenue terselamatkan/tahun<b id="r3"></b></div></div>
+<p id="ins" style="margin:12px 0 0;font-size:15.5px"></p></div>
+
+<h2 id="s4">4. Dataset<small>Dataset publik IBM Telco Customer Churn</small></h2>
+<div class="two"><div class="card">
+<p><b>Kenapa dataset ini?</b> Data pelanggan perusahaan nyata bersifat rahasia. Dataset Telco Customer Churn dari IBM (tersedia di Kaggle) meniru data perusahaan telekomunikasi dan dipakai luas untuk latihan analisis. Karena publik, siapa pun bisa mengunduh data yang sama dan mengecek ulang angka di project ini.</p>
+<p><b>Ukuran:</b> sekitar 7.043 pelanggan dan 21 kolom dalam 1 file CSV (perkiraan, diverifikasi saat data diunduh). Setiap baris berisi profil pelanggan, 9 jenis layanan, kontrak dan tagihan, serta status churn. Tidak ada kolom tanggal, jadi pola waktu dibaca dari tenure.</p>
+<p><b>Catatan awal:</b> beberapa kolom perlu dirapikan, misalnya TotalCharges tersimpan sebagai teks dan SeniorCitizen memakai 0/1. Lisensi dan cara sitasi dicek di halaman dataset sebelum dipakai.</p>
+<p style="margin:8px 0 0">Sumber data: <a href="https://www.kaggle.com/datasets/blastchar/telco-customer-churn" target="_blank" rel="noopener">here</a> (Versi: 1, Tanggal akses: 23 Oktober 2026)</p>
+</div>
+<div class="callout g"><h4>Hipotesis yang akan diuji (belum terbukti)</h4>
+<p>1. Pelanggan kontrak Month-to-month jauh lebih sering churn daripada kontrak tahunan.</p>
+<p>2. Churn paling tinggi terjadi di 12 bulan pertama berlangganan.</p>
+<p>3. Pelanggan Fiber optic dan Electronic check lebih sering churn.</p>
+<p>4. Pelanggan yang memakai Online Security dan Tech Support lebih jarang churn.</p>
+<p>5. Sebagian besar revenue yang hilang berasal dari sedikit segmen.</p></div></div>
+
+<h3>Empat tabel yang akan dibuat</h3>
+<p class="how">File CSV asli berisi semua kolom dalam satu tabel lebar. Data dipecah menjadi beberapa tabel yang terhubung lewat customer_id, seperti beberapa sheet Excel yang dihubungkan dengan satu kolom kunci. Pemisahan ini memudahkan perhitungan per layanan dan per segmen.</p>
+<div class="scroll"><table>
+<tr><th>Tabel</th><th>Isi (1 baris = …)</th><th>Kolom utama</th></tr>
+<tr><td><b>customers</b></td><td>Profil satu pelanggan</td><td>customer_id, gender, senior_citizen, partner, dependents</td></tr>
+<tr><td><b>accounts</b></td><td>Kontrak dan tagihan satu pelanggan</td><td>customer_id, tenure_months, contract, paperless_billing, payment_method, monthly_charges, total_charges, churn</td></tr>
+<tr><td><b>services</b></td><td>Satu layanan milik satu pelanggan</td><td>customer_id, service_name, status (Yes / No / Not available)</td></tr>
+<tr><td><b>dim_tenure_bucket</b></td><td>Daftar kelompok tenure (tabel referensi)</td><td>bucket_id, label, min_month, max_month</td></tr>
+</table></div>
+
+<div class="two"><div><h3>Contoh isi tabel accounts</h3>
+<div class="scroll"><table><tr><th>customer_id</th><th>tenure_months</th><th>contract</th><th>payment_method</th><th>monthly_charges</th><th>churn</th></tr>
+<tr><td>C-0001</td><td>3</td><td>Month-to-month</td><td>Electronic check</td><td>74.50</td><td>Yes</td></tr>
+<tr><td>C-0002</td><td>41</td><td>Two year</td><td>Credit card (automatic)</td><td>58.20</td><td>No</td></tr></table></div>
+<p style="font-size:var(--small);color:var(--mut);margin:4px 0 0">Angka karangan, bukan data asli.</p></div>
+
+<div class="card"><p style="margin:0 0 6px"><b>Kategori utama</b> yang dipakai sebagai segmen:</p>
+<p style="margin:4px 0 2px;font-size:var(--small);color:var(--mut)">Tipe kontrak</p><span class="chip">Month-to-month</span><span class="chip">One year</span><span class="chip">Two year</span>
+<p style="margin:8px 0 2px;font-size:var(--small);color:var(--mut)">Jenis internet</p><span class="chip">DSL</span><span class="chip">Fiber optic</span><span class="chip">No internet</span>
+<p style="margin:8px 0 2px;font-size:var(--small);color:var(--mut)">Metode bayar</p><span class="chip">Electronic check</span><span class="chip">Mailed check</span><span class="chip">Bank transfer (automatic)</span><span class="chip">Credit card (automatic)</span>
+<p style="margin:10px 0 4px"><b>Usulan kelompok tenure</b> (bisa disesuaikan): 0–6 bulan, 7–12 bulan, 13–24 bulan, 25–48 bulan, 49–72 bulan.</p></div></div>
+
+<h2 id="s5">5. Tools<small>Alat yang dipakai dan alasannya</small></h2>
+<div class="tools">
+<div class="card"><b>Python (pandas)</b><p class="r">Membaca CSV, memeriksa dan membersihkan data, memecah tabel lebar menjadi 4 tabel, lalu menghitung skenario dampak. Satu skrip bisa dijalankan ulang dari data mentah.</p><p class="alt">Bahasa paling umum di lowongan Data Analyst.</p></div>
+<div class="card"><b>DuckDB + SQL</b><p class="r">Database tempat semua tabel disimpan. SQL dipakai untuk churn rate per segmen, tabel silang, dan lost MRR. Perhitungan KPI dibuat sebagai view agar dashboard selalu memakai rumus yang sama.</p><p class="alt">Gratis, tanpa server, cukup satu file. Konsisten dengan project lain di portofolio. Daftar portofolio menulis SQL umum tanpa nama database.</p></div>
+<div class="card"><b>Excel (opsional)</b><p class="r">Cek silang: menghitung ulang churn rate dan lost MRR beberapa segmen dengan PivotTable untuk memastikan angka SQL benar (Q14). Bisa diganti cek silang dengan pandas.</p><p class="alt">Alat yang dikenal semua orang, jadi hasil mudah diverifikasi.</p></div>
+<div class="card"><b>Streamlit + Plotly</b><p class="r">Membuat dashboard web interaktif dengan filter kontrak, internet, metode bayar, dan tenure. Dipublikasikan gratis di Streamlit Community Cloud sehingga bisa dibuka lewat link.</p><p class="alt">Daftar portofolio menulis Power BI / Looker Studio. Streamlit dipilih agar semua tetap di Python dan link publik gratis. Power BI butuh akun work/school untuk publish.</p></div>
+<div class="card"><b>GitHub</b><p class="r">Menyimpan kode, query, dan README. Recruiter melihat project langsung dari repositori.</p><p class="alt">Standar industri untuk portofolio dan riwayat perubahan kode.</p></div>
+<div class="card"><b>Markdown</b><p class="r">Menulis README: masalah, data, analisis, rekomendasi, dampak, dan batasan.</p><p class="alt">Format teks sederhana yang tampil rapi otomatis di GitHub.</p></div>
+</div>
+
+<h2 id="s6">6. Work Plan<small>Setiap tahap punya warna sendiri. Label "beban besar" = langkah yang paling banyak memakan waktu</small></h2>
+<p class="how">Urutannya seperti membangun rumah: gambar rencana dulu, siapkan bahan, bangun fondasi, baru isi ruangan. Setiap langkah memakai hasil langkah sebelumnya, jadi urutannya tidak boleh dilompati.</p>
+
+<h3>Alur tahapan kerja</h3>
+<div class="card"><div class="wf">
+<div class="wrow"><div class="wl" style="--c:var(--navyH);--k:2"><h4>Tahap A · Perencanaan</h4><div class="ws"><div class="wb"><span class="n">1</span><b>Definisi KPI</b><span class="s">dokumen definisi</span></div><div class="wb"><span class="n">2</span><b>Struktur tabel</b><span class="s">kamus data</span></div></div></div><div class="wsep" aria-hidden="true"></div><div class="wl" style="--c:var(--tealH);--k:3"><h4>Tahap B · Menyiapkan data</h4><div class="ws"><div class="wb"><span class="n">3</span><b>Unduh &amp; profiling</b><span class="s">ringkasan profiling</span></div><div class="wb L"><span class="n">4</span><b>Cleaning</b><span class="s">log cleaning · Q13</span></div><div class="wb"><span class="n">5</span><b>Muat ke DuckDB</b><span class="s">4 tabel</span></div></div></div></div>
+<div class="wsep v" aria-hidden="true"></div>
+<div class="wl" style="--c:var(--plumH);--k:5"><h4>Tahap C · Menghitung dan menganalisis</h4><div class="ws"><div class="wb L"><span class="n">6</span><b>Query KPI &amp; segmen</b><span class="s">view SQL</span></div><div class="wb"><span class="n">7</span><b>Cek silang</b><span class="s">Q14</span></div><div class="wb L"><span class="n">8</span><b>Analisis pemicu churn</b><span class="s">Q1–Q10</span></div><div class="wb"><span class="n">9</span><b>Dampak retensi</b><span class="s">Q11–Q12</span></div><div class="wb"><span class="n">10</span><b>Uji kewajaran</b><span class="s">validasi temuan</span></div></div></div>
+<div class="wsep v" aria-hidden="true"></div>
+<div class="wl" style="--c:var(--roseH);--k:5"><h4>Tahap D · Menyajikan</h4><div class="ws"><div class="wb L"><span class="n">11</span><b>Dashboard</b><span class="s">link publik</span></div><div class="wb"><span class="n">12</span><b>README &amp; finalisasi</b><span class="s">repositori siap</span></div></div></div>
+</div>
+<p style="font-size:var(--small);color:var(--mut);margin:10px 0 0">Panah menunjukkan urutan pengerjaan. Angka di kotak sama dengan nomor langkah di bawah.</p></div>
+
+<div class="phases"><div class="ph" style="--ph:var(--navyH)"><p class="phase">Tahap A · Perencanaan</p>
+<ol class="steps">
+<li><b class="t">Menyepakati definisi KPI</b><p>Menetapkan rumus churn rate, retention rate, lost MRR, ARPU, dan revenue terselamatkan (bagian 3), serta batas tenure bucket dan batas minimal pelanggan per segmen.</p><p class="meta">Hasil: dokumen definisi · Alat: Markdown</p></li>
+<li><b class="t">Merancang struktur tabel</b><p>Menentukan 4 tabel, kolom, dan kolom penghubung. Membuat kamus data yang menjelaskan arti setiap kolom.</p><p class="meta">Hasil: diagram tabel dan kamus data · Alat: Markdown</p></li>
+</ol></div>
+
+<div class="ph" style="--ph:var(--tealH)"><p class="phase">Tahap B · Menyiapkan data</p>
+<ol class="steps" start="3" style="counter-reset:s 2">
+<li><b class="t">Mengunduh dan memeriksa data</b><p>Mengunduh CSV, lalu melakukan profiling: tipe data tiap kolom, nilai kosong, nilai unik, dan sebaran angka.</p><p class="meta">Hasil: ringkasan profiling · Alat: Python (pandas)</p></li>
+<li class="L"><b class="t">Membersihkan dan menstandarkan data</b><p>Mengubah TotalCharges menjadi angka, menangani baris kosong (perkiraan 11 baris), menyamakan format Yes/No, dan memutuskan nilai "No internet service". Setiap keputusan dicatat (Q13).</p><p class="meta">Hasil: data bersih dan log cleaning · Alat: Python (pandas)</p></li>
+<li><b class="t">Memasukkan data ke database</b><p>Memecah tabel lebar menjadi 4 tabel dan memuatnya ke DuckDB, dengan aturan pengecekan agar data yang salah tidak bisa masuk.</p><p class="meta">Hasil: file database · Alat: DuckDB</p></li>
+</ol></div>
+
+<div class="ph" style="--ph:var(--plumH)"><p class="phase">Tahap C · Menghitung dan menganalisis</p>
+<ol class="steps" style="counter-reset:s 5">
+<li class="L"><b class="t">Menulis query KPI dan segmen</b><p>Membuat query SQL untuk churn rate per kontrak, tenure, layanan, dan metode bayar, tabel silang segmen, serta lost MRR, lalu disimpan sebagai view.</p><p class="meta">Hasil: kumpulan query dan view KPI · Alat: SQL</p></li>
+<li><b class="t">Cek silang dengan Excel</b><p>Menghitung ulang beberapa segmen dengan PivotTable dan memastikan hasilnya sama dengan SQL (Q14).</p><p class="meta">Hasil: lembar cek silang · Alat: Excel</p></li>
+<li class="L"><b class="t">Menganalisis pemicu churn</b><p>Menjawab Q1–Q10: perbandingan kontrak, tenure, layanan, metode bayar, demografi, kurva retensi, dan segmen dengan revenue hilang terbesar.</p><p class="meta">Hasil: grafik dan tabel temuan · Alat: SQL, Python (Plotly)</p></li>
+<li><b class="t">Menghitung dampak program retensi</b><p>Menghitung revenue terselamatkan per tahun jika churn segmen teratas turun 10%, 20%, dan 30%, serta biaya program yang masih sepadan (Q11–Q12). Semua angka diberi label estimasi.</p><p class="meta">Hasil: tabel skenario · Alat: Python (pandas)</p></li>
+<li><b class="t">Menguji kewajaran temuan</b><p>Memastikan segmen yang direkomendasikan punya jumlah pelanggan cukup, dan memisahkan pola dari dugaan penyebab sebelum menulis rekomendasi.</p><p class="meta">Hasil: bagian validasi di README · Alat: Python</p></li>
+</ol></div>
+
+<div class="ph" style="--ph:var(--roseH)"><p class="phase">Tahap D · Menyajikan</p>
+<ol class="steps" style="counter-reset:s 10">
+<li class="L"><b class="t">Membuat dashboard</b><p>Dashboard 4 halaman: Ringkasan (KPI utama), Segmen Churn, Retensi per Tenure, dan Revenue &amp; Skenario. Dilengkapi filter, lalu dipublikasikan agar bisa dibuka lewat link.</p><p class="meta">Hasil: link dashboard · Alat: Streamlit, Plotly</p></li>
+<li><b class="t">Menulis README, rekomendasi, dan finalisasi</b><p>Menulis masalah, data, analisis, rekomendasi, dampak, dan batasan. Merapikan repositori dan memperbarui checklist di daftar portofolio.</p><p class="meta">Hasil: repositori GitHub siap ditinjau · Alat: Markdown, GitHub</p></li>
+</ol></div></div>
+
+<h2 id="s7">7. Project Outputs<span class="add">Komponen tambahan</span><small>Hasil nyata yang bisa dibuka, dibaca, atau dipakai ulang setelah project selesai</small></h2>
+<p class="how">Setiap kartu adalah satu output. Label "Utama" berarti wajib dibuat, "Opsional" dibuat jika waktu tersisa. Setiap output ditujukan untuk pembaca yang berbeda, mulai dari manajemen sampai analis lain.</p>
+<div class="outs"><div class="card out" style="--h:var(--navyH)"><div class="oh"><b>Dashboard interaktif</b><span class="ob">Utama</span></div><ul><li>Halaman web 4 bagian: Ringkasan, Segmen Churn, Retensi per Tenure, dan Revenue &amp; Skenario.</li><li>Dilengkapi filter kontrak, internet, metode bayar, dan tenure, serta slider skenario retensi.</li><li>Bentuk: link publik (Streamlit Community Cloud).</li><li>Untuk: tim marketing dan manajemen yang menentukan program retensi.</li></ul></div><div class="card out" style="--h:var(--roseH)"><div class="oh"><b>One-sheet infografik</b><span class="ob">Utama</span></div><ul><li>Ringkasan satu halaman: churn rate, 3 segmen paling berisiko, lost MRR, dan estimasi revenue terselamatkan.</li><li>Bisa dipahami dalam waktu kurang dari 1 menit.</li><li>Bentuk: file PDF dan PNG.</li><li>Untuk: manajemen dan recruiter yang tidak sempat membuka dashboard.</li></ul></div><div class="card out" style="--h:var(--tealH)"><div class="oh"><b>Database &amp; query SQL</b><span class="ob">Utama</span></div><ul><li>File database DuckDB berisi 4 tabel yang sudah bersih.</li><li>Kumpulan query dan view untuk semua KPI dan segmen dengan rumus yang sama.</li><li>Bentuk: file .duckdb dan folder query .sql.</li><li>Untuk: analis lain yang ingin memakai ulang atau mengembangkan analisis.</li></ul></div><div class="card out" style="--h:var(--plumH)"><div class="oh"><b>Skrip cleaning &amp; pemuat data</b><span class="ob">Utama</span></div><ul><li>Skrip Python yang mengubah CSV mentah menjadi 4 tabel bersih di database.</li><li>Bisa dijalankan ulang dari awal dengan satu perintah, dan mencatat setiap koreksi data.</li><li>Bentuk: skrip .py beserta kamus data.</li><li>Untuk: memastikan hasil bisa diulang oleh siapa saja.</li></ul></div><div class="card out" style="--h:var(--skyH)"><div class="oh"><b>Notebook analisis</b><span class="ob">Utama</span></div><ul><li>Langkah analisis Q1–Q14 lengkap dengan grafik dan penjelasan singkat.</li><li>Mencatat proses cleaning dan cek silang dengan Excel.</li><li>Bentuk: Jupyter Notebook (.ipynb).</li><li>Untuk: pembaca teknis yang ingin melihat cara angka dihitung.</li></ul></div><div class="card out" style="--h:var(--amberH)"><div class="oh"><b>Laporan temuan &amp; rekomendasi</b><span class="ob">Utama</span></div><ul><li>Berisi masalah, data, temuan, rekomendasi segmen sasaran, estimasi dampak, dan batasan.</li><li>Angka dampak diberi label estimasi beserta asumsinya.</li><li>Bentuk: README di GitHub.</li><li>Untuk: semua pembaca, sebagai pintu masuk project.</li></ul></div><div class="card out" style="--h:var(--navyH)"><div class="oh"><b>Repositori GitHub</b><span class="ob">Utama</span></div><ul><li>Semua output di atas tersusun dalam satu folder project yang rapi.</li><li>Dilengkapi petunjuk cara menjalankan ulang project.</li><li>Bentuk: link repositori GitHub.</li><li>Untuk: recruiter dan reviewer portofolio.</li></ul></div><div class="card out" style="--h:var(--tealH)"><div class="oh"><b>Slide presentasi</b><span class="ob opt">Opsional</span></div><ul><li>5–7 slide yang menceritakan masalah, pendekatan, temuan, dan rekomendasi.</li><li>Bentuk: PDF atau PowerPoint.</li><li>Untuk: presentasi saat wawancara kerja.</li></ul></div></div>
+
+<h3>Daftar dokumen yang akan dihasilkan</h3>
+<p class="how">Tabel diurutkan menurut tahap pengerjaan (A sampai D). Nama file adalah usulan awal. File bertanda "tidak di-commit" tidak diunggah ke GitHub karena bisa dibuat ulang dari skrip.</p>
+<div class="scroll"><table><tr><th>Nama dokumen</th><th>Isi</th><th>Tahap</th><th>Label</th></tr>
+<tr><td><b>index.html</b></td><td>Halaman rancangan ini (GitHub Pages)</td><td>A</td><td>Utama</td></tr>
+<tr><td><b>docs/kpi_definitions.md</b></td><td>Definisi dan rumus KPI, batas tenure bucket</td><td>A</td><td>Utama</td></tr>
+<tr><td><b>docs/data_dictionary.md</b></td><td>Kamus data 4 tabel</td><td>A</td><td>Utama</td></tr>
+<tr><td><b>data/README.md</b></td><td>Sumber, lisensi, sitasi, dan cara mengunduh dataset</td><td>B</td><td>Utama</td></tr>
+<tr><td><b>data/raw/telco_churn.csv</b></td><td>Data mentah dari sumber (tidak di-commit)</td><td>B</td><td>Utama</td></tr>
+<tr><td><b>scripts/clean_load.py</b></td><td>Skrip cleaning dan pemuat data ke DuckDB</td><td>B</td><td>Utama</td></tr>
+<tr><td><b>outputs/cleaning_log.csv</b></td><td>Catatan setiap baris yang diubah atau dibuang</td><td>B</td><td>Utama</td></tr>
+<tr><td><b>churn.duckdb</b></td><td>File database (tidak di-commit, dibuat ulang dari skrip)</td><td>B</td><td>Utama</td></tr>
+<tr><td><b>requirements.txt</b></td><td>Daftar library Python</td><td>B</td><td>Utama</td></tr>
+<tr><td><b>sql/</b></td><td>Query dan view KPI serta segmen</td><td>C</td><td>Utama</td></tr>
+<tr><td><b>notebooks/analysis.ipynb</b></td><td>Analisis Q1–Q14 dengan grafik</td><td>C</td><td>Utama</td></tr>
+<tr><td><b>outputs/crosscheck.xlsx</b></td><td>Lembar cek silang SQL vs Excel</td><td>C</td><td>Opsional</td></tr>
+<tr><td><b>outputs/scenarios.csv</b></td><td>Tabel skenario revenue terselamatkan</td><td>C</td><td>Utama</td></tr>
+<tr><td><b>dashboard/app.py</b></td><td>Aplikasi dashboard Streamlit</td><td>D</td><td>Utama</td></tr>
+<tr><td><b>outputs/one_sheet.pdf / .png</b></td><td>One-sheet infografik</td><td>D</td><td>Utama</td></tr>
+<tr><td><b>README.md</b></td><td>Problem, Data, Analysis, Recommendation, Impact</td><td>D</td><td>Utama</td></tr>
+<tr><td><b>slides/</b></td><td>Slide presentasi wawancara</td><td>D</td><td>Opsional</td></tr></table></div>
+
+<h2 id="s8">8. Success Criteria<span class="add">Komponen tambahan</span><small>Kapan project dianggap selesai dan berhasil</small></h2>
+<div class="card">
+<h3>Project dianggap berhasil jika</h3>
+<ul class="tight">
+<li>Kesembilan pertanyaan berlabel "Utama" terjawab dengan angka dari data.</li>
+<li>Angka KPI dari SQL sama dengan hitungan PivotTable Excel pada segmen yang dicek.</li>
+<li>Jumlah pelanggan dan jumlah churn setelah cleaning cocok dengan data mentah, dan setiap baris yang diubah tercatat di log cleaning.</li>
+<li>Orang awam bisa membuka dashboard dan menyebutkan segmen paling berisiko beserta revenue hilangnya dalam waktu kurang dari 1 menit.</li>
+<li>Checklist standar terpenuhi: pertanyaan bisnis, data cleaning, analisis SQL, dashboard ter-deploy, README berisi insight dan rekomendasi.</li>
+</ul></div>
+
+<h2 id="s9">9. Assumptions &amp; Limitations<span class="add">Komponen tambahan</span><small>Keputusan yang sudah diambil dan hal yang perlu diwaspadai</small></h2>
+<div class="two"><div><details open><summary>Jenis data: dataset publik IBM Telco <span class="pill">Sudah Anda setujui</span></summary><p>Data apa adanya dari sumber publik, tanpa tambahan data simulasi. Temuan menggambarkan dataset ini, bukan perusahaan telekomunikasi tertentu.</p></details>
+<details><summary>Tools: DuckDB + Streamlit <span class="pill">Sudah Anda setujui</span></summary><p>Konsisten dengan project lain di portofolio sehingga skrip dan pola kerja bisa dipakai ulang. Daftar portofolio menulis Power BI / Looker Studio; kolom Tools di daftar sebaiknya diperbarui.</p></details></div>
+<div>
+<details><summary>Ruang lingkup <span class="pill d">Usulan awal</span></summary><p>Fokus pada insight deskriptif, tanpa model prediksi churn. ARPU memakai monthly charges. Revenue dalam USD sesuai dataset, dan dampak tahunan dihitung dengan × 12. Segmen dengan kurang dari 100 pelanggan tidak dijadikan rekomendasi utama.</p></details>
+<details><summary>Hal yang perlu diwaspadai <span class="pill d">Usulan awal</span></summary>
+<p><b>Satu potret waktu.</b> Tidak ada tanggal bergabung atau tanggal berhenti, jadi kurva retensi hanya pendekatan dari tenure. Pelanggan yang sudah lama pergi tidak ada di data.</p>
+<p><b>Pola belum tentu penyebab.</b> Jika pelanggan Electronic check lebih banyak churn, itu baru pola. Metode bayar bisa saja hanya menyertai kontrak bulanan. Karena itu tabel silang dipakai untuk memisahkan pengaruh tiap faktor.</p>
+<p><b>Segmen kecil.</b> Persentase dari segmen dengan sedikit pelanggan mudah tampak ekstrem. Jumlah pelanggan selalu ditampilkan di samping churn rate.</p></details></div></div>
+</div>
+
+<div class="pane" id="report" data-tab="report" hidden>
+<div class="callout a"><h4>Status Report Project</h4><p>Analisis sudah dikerjakan; semua bagian terisi dari README dan angkanya dihitung dari data dengan SQL (DuckDB), lalu dicek ulang dengan pandas. Bagian Impact berisi skenario berlabel estimated (efek program belum teruji). Dashboard: <a href="project/results/3-presentation/dashboard.html">dashboard.html</a>. Rancangan lengkap ada di tab <a href="#design">Design Project</a>.</p></div>
+<div class="scroll"><table><tr><th>Bagian</th><th>Status</th><th>Diisi setelah</th></tr>
+<tr><td><b>Problem</b></td><td><span class="pill">Selesai</span></td><td>Sudah ditulis dari rancangan</td></tr>
+<tr><td><b>Data</b></td><td><span class="pill">Selesai</span></td><td>Tahap B, langkah 3 sampai 5</td></tr>
+<tr><td><b>Analysis</b></td><td><span class="pill">Selesai</span></td><td>Tahap C, langkah 6 sampai 10</td></tr>
+<tr><td><b>Recommendation</b></td><td><span class="pill">Selesai</span></td><td>Tahap D, langkah 11 sampai 12</td></tr>
+<tr><td><b>Impact</b></td><td><span class="pill p">Sebagian</span></td><td>Tahap C, langkah 6 sampai 10</td></tr>
+<tr><td><b>Batasan</b></td><td><span class="pill">Selesai</span></td><td>Diperbarui setelah Tahap B (langkah 3 sampai 5)</td></tr>
+</table></div>
+
+<h2 id="rp1">1. Problem<small>Pertanyaan yang ingin dijawab</small></h2>
+<div class="card"><p><b>Pertanyaan utama:</b> Segmen pelanggan mana (tipe kontrak, tenure, layanan, metode bayar) yang paling banyak churn, dan berapa revenue bulanan yang hilang dari segmen tersebut?</p>
+<p>Rancangan memecahnya menjadi 14 pertanyaan (9 Utama, 4 Pendukung, 1 Tambahan) dalam 5 tema: churn, segmen, revenue, dampak, serta validitas data. Semuanya terjawab (lihat tab *Report Project*).</p></div>
+
+<h2 id="rp2">2. Data<small>Sumber, ukuran, dan perlakuan awal</small></h2>
+<div class="card"><ul class="tight"><li>Sumber: Telco Customer Churn (IBM sample data). Rancangan merujuk <a href="https://www.kaggle.com/datasets/blastchar/telco-customer-churn" target="_blank" rel="noopener">Kaggle</a> (diakses 23 Oktober 2026); file yang dipakai diunduh 25 Oktober 2026 dari salinan IBM di GitHub (cara dan catatan lisensi: <code>project/data/README.md</code>).</li><li>Ukuran (terverifikasi): 7.043 pelanggan, 21 kolom, <code>customerID</code> unik, tanpa kolom tanggal (waktu dibaca dari tenure 0-72 bulan). Churn 1.869 pelanggan (26,54%).</li><li>Cleaning: hanya <code>TotalCharges</code> kosong (spasi) pada 11 baris tenure 0, diubah menjadi NULL; baris tidak dibuang, tidak ada imputasi. "No internet service" dipetakan ke <code>Not available</code>. Rincian: <code>project/docs/cleaning_decisions.md</code>.</li><li>Empat tabel (<code>customers</code>, <code>accounts</code>, <code>services</code>, <code>dim_tenure_bucket</code>) plus tampilan <code>v_customer</code>. File mentah tidak di-commit.</li></ul></div>
+
+<h2 id="rp3">3. Analysis<small>Hasil perhitungan dari data</small></h2>
+<div class="card"><p>Pipeline: SQL (DuckDB) membuat tabel dan query, pandas menghitung ulang secara independen sebagai crosscheck (19 dari 19 PASS), skrip validasi menguji kewajaran, dashboard menghitung ulang KPI sesuai filter dari kubus agregat.</p>
+<p>Temuan utama (angka dari <code>project/results/</code>):</p>
+<ul class="tight"><li><b>Kontrak:</b> churn 26,5% keseluruhan. Month-to-month 42,7%, One year 11,3%, Two year 2,8%. Kontrak bulanan = 55% pelanggan tetapi 88,6% dari semua churn.</li><li><b>Tenure:</b> churn 52,9% pada 0-6 bulan, turun menjadi 9,5% pada 49-72 bulan. 12 bulan pertama = 55,5% dari semua churn.</li><li><b>Layanan:</b> Fiber optic 41,9% vs DSL 19,0%; dengan Online Security 14,6% vs tanpa 41,8% (pelanggan internet). Setelah kontrak dan tenure disamakan, selisih Online Security dan Tech Support mengecil sekitar separuh.</li><li><b>Metode bayar:</b> Electronic check 45,3% vs 15,2-19,1% metode lain (setelah strata: +14,8 poin dari +28,2).</li><li><b>Demografi:</b> gender tidak berpengaruh (p=0,47); senior 41,7% vs 23,6%; selisih partner hilang setelah kontrak dan tenure disamakan.</li><li><b>Revenue hilang:</b> lost MRR US$ 139.131 per bulan (30,5% dari MRR). Segmen <b>Month-to-month · Fiber optic · Electronic check</b> (n=1.307, churn 60,4%) menyumbang 49,1%; lima segmen teratas 78,5% dengan 36,9% pelanggan.</li></ul>
+<p>Hipotesis pada rancangan (H1-H5):</p>
+<div class="scroll"><table><tr><th>ID</th><th>Hipotesis</th><th>Bukti</th><th>Kesimpulan</th></tr><tr><td>H1</td><td>Kontrak Month-to-month jauh lebih sering churn daripada kontrak tahunan</td><td>M2M 42,7% vs One year 11,3% vs Two year 2,8%</td><td>Didukung</td></tr><tr><td>H2</td><td>Churn paling tinggi di 12 bulan pertama</td><td>0-6 bulan 52,9%, 7-12 bulan 35,9%, 13-24 bulan 28,7%</td><td>Didukung</td></tr><tr><td>H3</td><td>Fiber optic dan Electronic check lebih sering churn</td><td>Fiber vs DSL: mentah +22,93 poin, setelah strata +19,64; Electronic check vs lain: mentah +28,23, setelah strata +14,84</td><td>Didukung (selisih mengecil setelah kontrol kontrak dan tenure, tetapi tetap ada)</td></tr><tr><td>H4</td><td>Pelanggan dengan Online Security dan Tech Support lebih jarang churn</td><td>Online Security: mentah -27,16 poin, setelah strata -12,85; Tech Support: mentah -26,47, setelah strata -10,56</td><td>Didukung (selisih mengecil setelah kontrol, tetapi tetap negatif)</td></tr><tr><td>H5</td><td>Sebagian besar revenue hilang berasal dari sedikit segmen</td><td>5 dari 34 segmen menyumbang 78,5% lost MRR dengan 36,9% pelanggan; segmen teratas saja 49,1%</td><td>Didukung</td></tr></table></div>
+<p>Kesimpulan "Didukung" berarti pola ada di data ini dan lolos uji kewajaran, bukan bukti sebab-akibat.</p>
+<p>Seberapa kuat polanya setelah faktor lain disamakan (selisih churn di dalam strata kontrak × kelompok tenure, dirata-rata berbobot):</p>
+<div class="scroll"><table><tr><th>Perbandingan</th><th>Selisih mentah (poin)</th><th>Setelah strata (poin)</th></tr><tr><td>Electronic check vs metode lain</td><td>+28,2</td><td>+14,8</td></tr><tr><td>Fiber optic vs DSL (pelanggan internet)</td><td>+22,9</td><td>+19,6</td></tr><tr><td>Paperless billing vs tidak</td><td>+17,2</td><td>+12,9</td></tr><tr><td>Punya Online Security vs tidak (pelanggan internet)</td><td>−27,2</td><td>−12,8</td></tr><tr><td>Punya Tech Support vs tidak (pelanggan internet)</td><td>−26,5</td><td>−10,6</td></tr><tr><td>Senior vs non-senior</td><td>+18,1</td><td>+12,6</td></tr><tr><td>Punya partner vs tidak</td><td>−13,3</td><td>+0,4</td></tr></table></div>
+<p>Ukuran hubungan (Cramer's V, semua p &lt; 0,001 kecuali gender): kontrak 0,41; tenure 0,36; jenis internet 0,32; metode bayar 0,30; Online Security 0,28; Tech Support 0,27. Ini asosiasi, bukan model prediksi.</p>
+<p>File hasil:</p>
+<ul class="tight"><li><a href="project/results/3-presentation/dashboard.html">Dashboard interaktif</a> (satu file HTML, tanpa library luar) dan dashboard Streamlit opsional.</li><li><code>project/results/3-presentation/analysis.ipynb</code>: notebook Q1 sampai Q14 dengan grafik.</li><li><code>project/results/2-analysis/</code>: CSV hasil SQL, <code>crosscheck.csv</code>, <code>significance.csv</code>, <code>adjusted_gaps.csv</code>, <code>sensitivity.csv</code>, <code>hypotheses.csv</code>.</li></ul></div>
+
+<h2 id="rp4">4. Recommendation<small>Tindakan yang disarankan dari temuan</small></h2>
+<div class="card"><ol class="tight"><li>Fokuskan program retensi pada segmen Month-to-month · Fiber optic · Electronic check (hampir setengah revenue hilang). Usulan tindakan, belum teruji: tawaran pindah ke pembayaran otomatis dan kontrak 12 bulan.</li><li>Segmen 2-5 (kontrak bulanan, Fiber atau DSL, n 201-474) menyusul.</li><li>Garap 12 bulan pertama pelanggan kontrak bulanan.</li><li>Dorong Online Security dan Tech Support pada pelanggan Fiber optic, tetapi uji dulu efeknya.</li><li>Jangan memakai gender atau status partner sebagai dasar sasaran. Segmen n &lt; 100 tidak direkomendasikan.</li><li>Uji lewat A/B test sebelum diperluas.</li></ol></div>
+
+<h2 id="rp5">5. Impact<small>Seberapa besar manfaatnya</small></h2>
+<div class="card"><pre><code>Revenue terselamatkan per tahun = (churn lama − churn baru) × pelanggan segmen × ARPU × 12</code></pre>
+<p>Semua hasil berlabel <code>estimated</code>; asumsi: ARPU = rata-rata MonthlyCharges segmen, USD, penurunan churn merata, efek program belum teruji.</p>
+<div class="scroll"><table><tr><th>Churn turun (relatif)</th><th>Segmen 1 saja</th><th>5 segmen teratas</th></tr><tr><td>10%</td><td>US$ 82.546 / tahun</td><td>US$ 132.664 / tahun</td></tr><tr><td><b>20% (K5, ditetapkan di muka)</b></td><td><b>US$ 165.092 / tahun</b></td><td><b>US$ 265.327 / tahun</b></td></tr><tr><td>30%</td><td>US$ 247.637 / tahun</td><td>US$ 397.991 / tahun</td></tr></table></div>
+<p>Batas biaya impas (skenario 20%, segmen 1): sekitar US$ 126 per pelanggan segmen per tahun. Detail: <code>project/results/2-analysis/breakeven.csv</code>.</p></div>
+
+<h2 id="rp6">6. Batasan yang sudah diketahui<small>Hal yang perlu diwaspadai saat membaca hasil</small></h2>
+<div class="card"><ul class="tight"><li>Satu potret waktu tanpa tanggal; kurva retensi (Kaplan-Meier) hanya pendekatan dari tenure, memakai kontrak saat ini, dan ujungnya berbasis sedikit pelanggan.</li><li>Pola bukan sebab-akibat: selisih mengecil setelah faktor lain disamakan, dan Fiber optic lebih mahal sehingga harga ikut bercampur.</li><li>Segmen kecil mudah tampak ekstrem (n &lt; 30 tidak dibaca, n &lt; 100 tidak direkomendasikan).</li><li>Angka dampak adalah skenario; efek program belum teruji.</li><li>Dataset sampel buatan IBM; hasil menggambarkan dataset ini, bukan perusahaan tertentu.</li><li>Lisensi dataset belum diverifikasi. File IBM sudah dibandingkan dengan file Kaggle (<code>WA_Fn-UseC_-Telco-Customer-Churn.csv</code>, 25 Oktober 2026): 7.043 baris × 21 kolom, 0 sel berbeda; hanya akhir baris berbeda (Kaggle CRLF, IBM LF), hash identik setelah CR dibuang.</li><li>Belum dibuat: lembar cek silang Excel (diganti pandas), one-sheet, slide wawancara, publikasi dashboard Streamlit ke link publik.</li></ul></div>
+</div>
+</main>
+
+<script>
+const $=id=>document.getElementById(id),f1=v=>(v*100).toFixed(1).replace('.',',')+'%',usd=v=>'US$ '+Math.round(v).toLocaleString('id-ID');
+const P=[["M2M · Fiber",2128,.546,87],["M2M · DSL",1223,.322,55],["M2M · No internet",524,.189,21],["One year",1473,.113,66],["Two year",1695,.028,61]],N=P.reduce((s,p)=>s+p[1],0);
+let sel=0;const tot=c=>P.reduce((s,p,i)=>s+p[1]*c[i],0)/N;
+function draw(){const x=$('sl').value/100,c=P.map((p,i)=>i==sel?p[2]*(1-x):p[2]),r0=tot(P.map(p=>p[2])),r1=tot(c),sv=(P[sel][2]-c[sel])*P[sel][1]*P[sel][3]*12;
+$('slo').textContent=Math.round(x*100)+'%';
+$('bars').innerHTML=P.map((p,i)=>`<button type="button" class="row${i==sel?' sel':''}" data-i="${i}" aria-pressed="${i==sel}"><span class="n">${p[0]}</span><span class="tr"><span class="b" style="width:${c[i]/.6*100}%"></span></span><span class="c">${f1(c[i])}</span></button>`).join('');
+$('r1').textContent=f1(r0);$('r2').textContent=f1(r1);$('r3').textContent=usd(sv);
+const ch=P.map(p=>p[1]*p[2]),share=ch[0]/ch.reduce((a,b)=>a+b,0);
+$('ins').innerHTML=`Segmen M2M · Fiber hanya ${f1(P[0][1]/N)} dari pelanggan, tetapi menyumbang <b>${f1(share)}</b> dari semua pelanggan yang churn. Menurunkan churn ${P[sel][0]} sebesar ${Math.round(x*100)}% (dari ${f1(P[sel][2])} ke ${f1(c[sel])}) menyelamatkan sekitar <b>${usd(sv)} per tahun</b> (estimasi, ${P[sel][1].toLocaleString('id-ID')} pelanggan × ARPU US$ ${P[sel][3]}). Skala batang 0–60%.`}
+$('bars').onclick=e=>{const r=e.target.closest('.row');if(r){sel=+r.dataset.i;draw()}};$('sl').oninput=draw;draw();
+
+const G=[["churn rate","i","Persentase pelanggan yang berhenti berlangganan.\nRumus: churn rate = pelanggan churn ÷ total pelanggan.\nContoh: 1.000 pelanggan, 265 berhenti, churn rate = 26,5%."],["churn","i","Pelanggan berhenti berlangganan dan tidak kembali."],["retention rate","i","Persentase pelanggan yang tetap berlangganan.\nRumus: retention rate = 1 − churn rate."],["lost MRR","i","Lost Monthly Recurring Revenue: total tagihan bulanan dari pelanggan yang churn.\nRumus: lost MRR = jumlah monthly charges semua pelanggan churn."],["ARPU","","Average Revenue Per User: rata-rata tagihan bulanan per pelanggan.\nRumus: ARPU = total monthly charges ÷ jumlah pelanggan."],["revenue terselamatkan","i","Estimasi revenue yang tidak hilang jika churn berhasil diturunkan.\nRumus: (churn lama − churn baru) × pelanggan segmen × ARPU × 12.\nContoh: churn turun dari 50% ke 40% di 2.000 pelanggan dengan ARPU US$ 80 = 200 × 80 × 12 = US$ 192.000 per tahun."],["tenure bucket","i","Kelompok lama berlangganan, misalnya 0–6 bulan atau 7–12 bulan."],["tenure","i","Berapa bulan pelanggan sudah berlangganan."],["kurva retensi","i","Grafik persentase pelanggan yang masih bertahan menurut lama berlangganan. Makin landai kurvanya, makin baik."],["segmen","i","Kelompok pelanggan dengan ciri yang sama, misalnya kontrak bulanan + Fiber optic."],["Month-to-month","","Kontrak bulanan tanpa ikatan jangka panjang. Pelanggan bisa berhenti kapan saja."],["Fiber optic","","Jenis internet berbasis serat optik, lebih cepat dan umumnya lebih mahal daripada DSL."],["Electronic check","","Metode bayar manual secara elektronik, tidak dipotong otomatis setiap bulan."],["paperless billing","i","Tagihan dikirim secara digital, bukan kertas."],["bundling","i","Pelanggan memakai beberapa layanan sekaligus dari satu perusahaan."],["monthly charges","i","Tagihan bulanan satu pelanggan."],["break-even","i","Titik impas: biaya program sama dengan revenue yang terselamatkan."],["tabel silang","i","Tabel yang membandingkan dua faktor sekaligus, misalnya kontrak × metode bayar."],["Pareto","i","Cara mengurutkan dari penyumbang terbesar. Biasanya sedikit segmen menyumbang sebagian besar kerugian."],["profiling","i","Pemeriksaan awal data: tipe kolom, nilai kosong, nilai unik, dan sebaran angka."],["dataset publik","i","Data yang dibagikan terbuka dan bisa diunduh siapa saja."],["Kaggle","","Situs komunitas data science yang menyediakan dataset dan kompetisi."],["PivotTable","i","Fitur Excel untuk meringkas dan menghitung data per kelompok."],["KPI","","Key Performance Indicator: angka kunci untuk menilai kinerja, misalnya churn rate."],["SQL","","Bahasa untuk meminta dan mengolah data dari tabel database."],["DuckDB","i","Database ringan dalam satu file, untuk menjalankan SQL tanpa server."],["dashboard","i","Halaman ringkasan interaktif berisi grafik dan angka kunci."],["Streamlit","i","Alat untuk membuat dashboard web memakai Python."],["view","i","Query SQL yang disimpan dengan nama, sehingga bisa dipanggil seperti tabel."],["kamus data","i","Dokumen yang menjelaskan arti, satuan, dan contoh isi setiap kolom."],["README","","Dokumen penjelasan project yang dibaca pertama kali di repositori GitHub."],["program retensi","i","Upaya mempertahankan pelanggan, misalnya diskon pindah ke kontrak tahunan."]];
+const TERMS=G.map(([t,f,d])=>({t,d,re:new RegExp('(?<![\\w-])'+t.replace(/[.*+?^${}()|[\]\\-]/g,'\\$&')+'(?![\\w-])',f)}));
+const SK='svg,.fx,.fbar,.oh,h1,h2,h3,nav,button,script,style,summary,.tm,.tag,.pri,.pill,.v,.l,.chip,.flow,th,#tip,.banner,.theme,.phase,.add,.tools b,b.t,table td:first-child,.wb,code';
+function wrapT(n,seen){let b=null;for(const x of TERMS){if(seen.has(x.t))continue;const m=x.re.exec(n.data);if(m&&(!b||m.index<b.i||(m.index==b.i&&m[0].length>b.l)))b={x,i:m.index,l:m[0].length}}
+if(!b)return;seen.add(b.x.t);const r=n.splitText(b.i),a=r.splitText(b.l),s=document.createElement('span');s.className='tm';s.tabIndex=0;s.dataset.d=b.x.d;s.textContent=r.data;r.replaceWith(s);wrapT(a,seen)}
+function hl(root,seen){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement.closest(SK)?3:1}),ns=[];while(w.nextNode())ns.push(w.currentNode);ns.forEach(n=>wrapT(n,seen))}
+const tip=document.createElement('div');tip.id='tip';tip.setAttribute('role','tooltip');document.body.appendChild(tip);
+function showT(e){tip.textContent=e.dataset.d;tip.style.display='block';const r=e.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;tip.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left))+'px';tip.style.top=(r.bottom+h+12>innerHeight?r.top-h-6:r.bottom+6)+'px'}
+document.addEventListener('click',ev=>{const t=ev.target.closest('.tm');t?showT(t):tip.style.display='none'});
+document.addEventListener('mouseover',ev=>{const t=ev.target.closest('.tm');if(t)showT(t)});
+document.addEventListener('mouseout',ev=>{if(ev.target.closest&&ev.target.closest('.tm'))tip.style.display='none'});
+document.addEventListener('focusin',ev=>{const t=ev.target.closest&&ev.target.closest('.tm');if(t)showT(t)});
+addEventListener('scroll',()=>tip.style.display='none',{passive:true});
+const qg=$('qg');document.querySelector('.fbar').onclick=e=>{const b=e.target.closest('.fb');if(!b)return;const f=b.dataset.f;
+document.querySelectorAll('.fb').forEach(x=>x.classList.toggle('on',x==b));let th=null,vis=0;
+[...qg.children].forEach(el=>{if(el.classList.contains('theme')){if(th)th.hidden=!vis;th=el;vis=0}else{const show=f=='*'||el.dataset.p==f;el.hidden=!show;if(show)vis++}});if(th)th.hidden=!vis};
+let seen=new Set();document.querySelectorAll('main>.pane>*').forEach(el=>{if(el.tagName=='H2')seen=new Set();hl(el,seen)});
+
+const TB=[...document.querySelectorAll('.tab')];
+function setTab(t){document.querySelectorAll('.pane,.links').forEach(e=>e.hidden=e.dataset.tab!==t);TB.forEach(x=>{const on=x.dataset.t===t;x.classList.toggle('on',on);x.setAttribute('aria-expanded',on)})}
+function route(){const h=decodeURIComponent(location.hash.slice(1)),el=h&&document.getElementById(h);
+if(h=='design'||h=='report'){setTab(h);scrollTo(0,0);return}
+if(el){const p=el.closest('.pane');if(p){setTab(p.dataset.tab);el.scrollIntoView()}}}
+TB.forEach(x=>x.onclick=()=>{location.hash=x.dataset.t});
+addEventListener('hashchange',route);route();
+</script>
+
+</body></html>
