@@ -399,7 +399,7 @@ crit_rows = [
     (CRIT[2], OK("Tercapai"), f"{fmt(N)} pelanggan dan {fmt(CH)} churn cocok dengan data mentah (dijaga oleh pemeriksaan integritas); {fmt(len(clog))} nilai yang diubah tercatat di log"),
     (CRIT[3], NO("Belum teruji"), "Belum diuji dengan pembaca awam"),
     (CRIT[4], WARN("Sebagian"), "Pertanyaan, cleaning, SQL, dan README terpenuhi; dashboard belum di-deploy ke link publik")]
-sec7 = f'''<h2 id="rp7">7. Kesimpulan<small>Hasil analisis, Impact, success criteria, saran perbaikan, rekomendasi, dan item terbuka</small></h2>
+sec7 = f'''<h2 id="rp7">7. Kesimpulan<small>Hasil analisis, Impact, success criteria, rekomendasi, saran perbaikan, dan batasan</small></h2>
 <div class="card"><h4>7.1 Hasil analisis: jawaban atas pertanyaan utama</h4><p><i>Segmen pelanggan mana (tipe kontrak, tenure, layanan, metode bayar) yang paling banyak churn, dan berapa revenue bulanan yang hilang dari segmen tersebut?</i></p><ul class="tight">
 <li><b>Segmen:</b> <b>{e(top.contract)} · {e(top.internet_service)} · {e(top.payment_method)}</b> ({fmt(top.n)} pelanggan, {pct(top.n / N * 100)} dari seluruh pelanggan) churn {pct(top.churn_rate)} dan menyumbang {pct(top.share_lost_mrr)} dari revenue bulanan yang hilang ({usd(top.lost_mrr)} dari {usd(ov.lost_mrr)}). Lima segmen teratas menyumbang {pct(top5_share)}.</li>
 <li><b>Kontrak dan tenure:</b> kontrak bulanan {pct(m2m.churn_rate)} vs {pct(ty.churn_rate)} pada dua tahun; churn tertinggi di 0 sampai 6 bulan ({pct(ten.loc['0-6 bulan','churn_rate'])}); 12 bulan pertama = {pct(first12)} dari semua churn.</li>
@@ -410,18 +410,18 @@ sec7 = f'''<h2 id="rp7">7. Kesimpulan<small>Hasil analisis, Impact, success crit
 <li><b>Nilai portofolio:</b> cleaning terdokumentasi, SQL, cek silang, uji kewajaran (strata, interval kepercayaan), dan dashboard yang bisa dijalankan ulang.</li>
 <li><b>Belum terukur:</b> dampak nyata. Tidak ada data penerapan program atau uji A/B.</li></ul></div>
 <div class="card"><h4>7.3 Success criteria</h4>{table(["Kriteria (Design Project, bagian 8)", "Status", "Bukti"], [[e(c), s, b] for c, s, b in crit_rows])}</div>
-<div class="card"><h4>7.4 Saran perbaikan</h4><ol class="tight">
+<div class="card"><h4>7.4 Rekomendasi</h4>{table(["#", "Segmen sasaran (n ≥ 100)", "n", "Churn", "Lost MRR/bulan"], [[fmt(i + 1), f"{e(r.contract)} · {e(r.internet_service)} · {e(r.payment_method)}", fmt(r.n), pct(r.churn_rate), usd(r.lost_mrr) + " (" + pct(r.share_lost_mrr) + ")"] for i, r in enumerate(reco.itertuples())])}
+<ul class="tight"><li><b>Fokuskan program retensi pada segmen 1</b> dahulu. Usulan tindakan (belum teruji): tawaran pindah ke pembayaran otomatis dan kontrak 12 bulan dengan insentif.</li>
+<li><b>Garap 12 bulan pertama</b> pelanggan kontrak bulanan ({pct(first12)} dari semua churn).</li>
+<li><b>Dorong Online Security dan Tech Support</b> pada pelanggan Fiber optic ({pct(sv('OnlineSecurity', 'No'))} churn tanpa vs {pct(sv('OnlineSecurity', 'Yes'))} dengan Online Security), tetapi uji dulu karena selisihnya mengecil setelah kontrol.</li>
+<li><b>Jangan memakai gender atau status partner</b> sebagai dasar sasaran.</li></ul></div>
+<div class="card"><h4>7.5 Saran perbaikan</h4><ol class="tight">
 <li>Uji program retensi lewat A/B test di sebagian segmen 1 sebelum diperluas (lihat project A/B Test Analysis).</li>
 <li>Bila tersedia data bertanggal, ganti kurva retensi pendekatan dengan analisis kohort sebenarnya.</li>
 <li>Tambahkan model dengan beberapa faktor sekaligus (mis. regresi logistik) untuk memisahkan pengaruh kontrak, harga, dan layanan.</li>
 <li>Publikasikan dashboard Streamlit (atau halaman HTML) ke link publik, buat one-sheet, dan uji dengan 3 sampai 5 pembaca awam apakah segmen paling berisiko terbaca dalam 1 menit.</li>
 <li>Verifikasi lisensi dan sitasi dataset sebelum publikasi.</li></ol></div>
-<div class="card"><h4>7.5 Rekomendasi</h4>{table(["#", "Segmen sasaran (n ≥ 100)", "n", "Churn", "Lost MRR/bulan"], [[fmt(i + 1), f"{e(r.contract)} · {e(r.internet_service)} · {e(r.payment_method)}", fmt(r.n), pct(r.churn_rate), usd(r.lost_mrr) + " (" + pct(r.share_lost_mrr) + ")"] for i, r in enumerate(reco.itertuples())])}
-<ul class="tight"><li><b>Fokuskan program retensi pada segmen 1</b> dahulu. Usulan tindakan (belum teruji): tawaran pindah ke pembayaran otomatis dan kontrak 12 bulan dengan insentif.</li>
-<li><b>Garap 12 bulan pertama</b> pelanggan kontrak bulanan ({pct(first12)} dari semua churn).</li>
-<li><b>Dorong Online Security dan Tech Support</b> pada pelanggan Fiber optic ({pct(sv('OnlineSecurity', 'No'))} churn tanpa vs {pct(sv('OnlineSecurity', 'Yes'))} dengan Online Security), tetapi uji dulu karena selisihnya mengecil setelah kontrol.</li>
-<li><b>Jangan memakai gender atau status partner</b> sebagai dasar sasaran.</li></ul></div>
-<div class="card"><h4>7.6 Item terbuka</h4><ul class="tight">
+<div class="card"><h4>7.6 Batasan</h4><ul class="tight">
 <li><b>Lisensi dan sitasi dataset</b> belum diverifikasi.</li>
 <li><b>Success criteria belum tercapai penuh:</b> cek silang Excel (diganti pandas), uji pemahaman 1 menit, dan dashboard ter-deploy.</li>
 <li><b>Output yang tidak dibuat:</b> one-sheet infografik, lembar Excel cek silang, slide wawancara, dan link publik dashboard.</li></ul></div>'''
