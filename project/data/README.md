@@ -12,5 +12,5 @@ Dataset: **Telco Customer Churn** (IBM sample data), 7.043 baris, 21 kolom, 1 fi
 2. Jalankan pipeline (lihat README utama).
 
 ## Yang perlu dicek sebelum publikasi
-- **Lisensi dan ketentuan sitasi** dataset (halaman Kaggle dan repo IBM) belum diverifikasi dalam project ini. Cek dulu dan cantumkan atribusi sesuai ketentuan.
+- **Lisensi:** halaman Kaggle menyatakan "Data files © Original Authors" (dicek 28 Oktober 2026), yaitu hak cipta penulis asli, bukan lisensi terbuka dan tanpa izin penggunaan ulang eksplisit. Lisensi repo IBM belum dicatat. Cantumkan sumber (Kaggle: blastchar/telco-customer-churn; IBM telco-customer-churn-on-icp4d) saat mempublikasikan hasil, dan jangan publikasikan data mentahnya.
 - Dataset adalah **data sampel buatan IBM** untuk latihan, bukan data pelanggan nyata. Temuan menggambarkan dataset ini, bukan perusahaan telekomunikasi tertentu.

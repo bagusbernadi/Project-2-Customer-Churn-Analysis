@@ -301,7 +301,7 @@ sec2 = f'''<h2 id="rp2">2. Apakah business question terjawab?<small>{fmt(len(PRI
 
 # ------------------------------------------------------------------ bagian 3-6: kesesuaian
 sec3 = f'''<h2 id="rp3">3. Apakah dataset sesuai dengan Design Project?<small>Perbandingan rancangan dengan realisasi</small></h2>
-<div class="card"><p><b>Jawaban singkat:</b> dataset yang dipakai <b>sama</b> dengan rancangan (Telco Customer Churn, IBM). Ada tiga perubahan kecil: sumber unduhan, pemetaan "No internet service", dan struktur tabel. Dua hal belum dikerjakan: verifikasi lisensi dan sitasi.</p></div>
+<div class="card"><p><b>Jawaban singkat:</b> dataset yang dipakai <b>sama</b> dengan rancangan (Telco Customer Churn, IBM). Ada tiga perubahan kecil: sumber unduhan, pemetaan "No internet service", dan struktur tabel. Lisensi sudah dicatat pada 28 Okt 2026; lisensi repo IBM belum dicatat.</p></div>
 {table(["Aspek", "Rancangan", "Realisasi", "Verdict"], [
     ["Sumber", "IBM Telco Customer Churn, Kaggle", "File diunduh dari salinan IBM di GitHub; dibandingkan dengan file Kaggle pengguna: isi identik, hanya akhir baris (CRLF vs LF) berbeda (<code>project/data/README.md</code>)", OK("Sesuai")],
     ["Ukuran", "Perkiraan ±7.043 pelanggan, 21 kolom, belum diverifikasi", f"{fmt(N)} pelanggan, {fmt(n_cols)} kolom; customerID unik", OK("Terverifikasi")],
@@ -310,7 +310,7 @@ sec3 = f'''<h2 id="rp3">3. Apakah dataset sesuai dengan Design Project?<small>Pe
     ["SeniorCitizen", "Memakai 0/1", "Disimpan sebagai angka 0/1", OK("Sesuai")],
     ["No internet service", "Perlu diputuskan", "Dipetakan ke Not available; layanan dibandingkan di antara pelanggan internet saja", OK("Diputuskan")],
     ["Tabel", "4 tabel: customers, accounts, services, dim_tenure_bucket", "4 tabel yang sama + churn_raw (salinan mentah) + tampilan v_customer", WARN("Ditambah")],
-    ["Lisensi dan sitasi", "Dicek sebelum publikasi", "Belum diverifikasi", NO("Belum")]])}'''
+    ["Lisensi dan sitasi", "Dicek sebelum publikasi", "Kaggle: Data files © Original Authors (dicek 28 Okt 2026); lisensi repo IBM belum dicatat", WARN("Sebagian")]])}'''
 
 sec4 = f'''<h2 id="rp4">4. Apakah tools yang digunakan sesuai?<small>Perbandingan rancangan dengan eksekusi</small></h2>
 <div class="card"><p><b>Jawaban singkat:</b> tools inti (Python/pandas, DuckDB + SQL, Markdown) sesuai rancangan. Perubahan: dashboard utama berupa HTML statis (Streamlit tersedia sebagai opsional dan belum dipublikasikan), cek silang memakai pandas (bukan Excel), dan KPI dibuat sebagai tabel (bukan view). Kode dan hasil sudah di GitHub (branch main, lewat pull request).</p></div>
@@ -420,9 +420,9 @@ sec7 = f'''<h2 id="rp7">7. Kesimpulan<small>Hasil analisis, Impact, success crit
 <li>Bila tersedia data bertanggal, ganti kurva retensi pendekatan dengan analisis kohort sebenarnya.</li>
 <li>Tambahkan model dengan beberapa faktor sekaligus (mis. regresi logistik) untuk memisahkan pengaruh kontrak, harga, dan layanan.</li>
 <li>Publikasikan dashboard Streamlit (atau halaman HTML) ke link publik, buat one-sheet, dan uji dengan 3 sampai 5 pembaca awam apakah segmen paling berisiko terbaca dalam 1 menit.</li>
-<li>Verifikasi lisensi dan sitasi dataset sebelum publikasi.</li></ol></div>
+<li>Catat lisensi repo IBM dan pastikan atribusi sumber dicantumkan sebelum publikasi.</li></ol></div>
 <div class="card"><h4>7.6 Batasan</h4><ul class="tight">
-<li><b>Lisensi dan sitasi dataset</b> belum diverifikasi.</li>
+<li><b>Lisensi dataset:</b> hak cipta penulis asli (label Kaggle, bukan lisensi terbuka); lisensi repo IBM belum dicatat.</li>
 <li><b>Success criteria belum tercapai penuh:</b> cek silang Excel (diganti pandas), uji pemahaman 1 menit, dan dashboard ter-deploy.</li>
 <li><b>Output yang tidak dibuat:</b> one-sheet infografik, lembar Excel cek silang, slide wawancara, dan link publik dashboard.</li></ul></div>'''
 
@@ -431,7 +431,7 @@ status = f'''<div class="callout g"><h4>Report Project versi 2: evaluasi hasil t
 <div class="scroll"><table class="evq"><tr><th>No</th><th>Pertanyaan evaluasi</th><th>Verdict</th><th>Ringkasan</th></tr>
 <tr><td><span class="en">1</span></td><td><a href="#rp1">Data yang didapat</a></td><td>{OK("Didapat")}</td><td>{fmt(N)} pelanggan, {fmt(n_cols)} kolom; {fmt(len(clog))} nilai diubah; hasil di <code>project/results/</code></td></tr>
 <tr><td><span class="en">2</span></td><td><a href="#rp2">Business question terjawab?</a></td><td>{OK(f"{len(PRIO)} dari {len(PRIO)}")}</td><td>Semua terjawab; {fmt(n_warn)} dengan catatan</td></tr>
-<tr><td><span class="en">3</span></td><td><a href="#rp3">Dataset sesuai?</a></td><td>{OK("Sesuai")}</td><td>Dataset sama; lisensi belum diverifikasi</td></tr>
+<tr><td><span class="en">3</span></td><td><a href="#rp3">Dataset sesuai?</a></td><td>{OK("Sesuai")}</td><td>Dataset sama; lisensi dicek 28 Okt 2026 (hak cipta penulis asli)</td></tr>
 <tr><td><span class="en">4</span></td><td><a href="#rp4">Tools sesuai?</a></td><td>{WARN("Sebagian")}</td><td>Inti sesuai; Excel tidak dibuat, Streamlit belum publik</td></tr>
 <tr><td><span class="en">5</span></td><td><a href="#rp5">Alur kerja sesuai?</a></td><td>{OK("Sesuai")}</td><td>{fmt(len(STEPS))} langkah dijalankan; perubahan teknis</td></tr>
 <tr><td><span class="en">6</span></td><td><a href="#rp6">Project output tercapai?</a></td><td>{WARN("Sebagian")}</td><td>One-sheet dan link publik belum ada</td></tr>

@@ -102,7 +102,7 @@ Batas biaya impas (skenario 20%, segmen 1): sekitar US$ 126 per pelanggan segmen
 - Segmen kecil mudah tampak ekstrem (n < 30 tidak dibaca, n < 100 tidak direkomendasikan).
 - Angka dampak adalah skenario; efek program belum teruji.
 - Dataset sampel buatan IBM; hasil menggambarkan dataset ini, bukan perusahaan tertentu.
-- Lisensi dataset belum diverifikasi. File IBM sudah dibandingkan dengan file Kaggle (`WA_Fn-UseC_-Telco-Customer-Churn.csv`, 25 Oktober 2026): 7.043 baris × 21 kolom, 0 sel berbeda; hanya akhir baris berbeda (Kaggle CRLF, IBM LF), hash identik setelah CR dibuang.
+- Lisensi dataset: Kaggle menyatakan "Data files © Original Authors" (dicek 28 Oktober 2026), yaitu hak cipta penulis asli, bukan lisensi terbuka; lisensi repo IBM belum dicatat, jadi pakai untuk analisis pribadi/portofolio dan cantumkan sumbernya. File IBM sudah dibandingkan dengan file Kaggle (`WA_Fn-UseC_-Telco-Customer-Churn.csv`, 25 Oktober 2026): 7.043 baris × 21 kolom, 0 sel berbeda; hanya akhir baris berbeda (Kaggle CRLF, IBM LF), hash identik setelah CR dibuang.
 - Belum dibuat: lembar cek silang Excel (diganti pandas), one-sheet, slide wawancara, publikasi dashboard Streamlit ke link publik.
 
 ## Menjalankan
